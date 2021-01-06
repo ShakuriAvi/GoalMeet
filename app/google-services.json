@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "420878434317",
+    "project_id": "goalmeetfirebase",
+    "storage_bucket": "goalmeetfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420878434317:android:8ae9e7833de2427e739544",
+        "android_client_info": {
+          "package_name": "com.example.goalmeet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "420878434317-ltogf3pibchihsd5a3ghl2lmavv1s69l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCozdd44nmvFSkI-Xc0A71DT9L7s8xdA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "420878434317-ltogf3pibchihsd5a3ghl2lmavv1s69l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

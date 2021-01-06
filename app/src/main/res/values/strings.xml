@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GoalMeet</string>
+    <string name="notes_about_me"> please enter about you </string>
+    <string name="title_about_me">About Me </string>
+    <string name="Navigation_drawer_open">Navigation drawer open</string>
+    <string name="Navigation_drawer_close">Navigation drawer close</string>
+</resources>
