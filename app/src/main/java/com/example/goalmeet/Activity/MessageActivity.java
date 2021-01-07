@@ -56,21 +56,23 @@ public class MessageActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        Log.d("aaaa","1111");
+        initView();
+        manageMessage();
+        clickOnImage();
+        Log.d("aaaa","4444");
+    }
+
+    private void initView() {
+
         message_TXT_username = findViewById(R.id.message_TXT_username);
         message_IMG_profile = findViewById(R.id.message_IMG_profil);
         message_BTN_send = findViewById(R.id.message_BTN_send);
         message_ETXT_send = findViewById(R.id.message_ETXT_send);
-        Log.d("aaaa","22222");
         recyclerView = findViewById(R.id.message_recyclerView);
         recyclerView.setHasFixedSize(true);
-        Log.d("aaaa","33333");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        manageMessage();
-        clickOnImage();
-        Log.d("aaaa","4444");
     }
 
 

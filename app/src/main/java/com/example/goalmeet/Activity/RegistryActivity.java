@@ -74,7 +74,7 @@ public class RegistryActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     FirebaseUser firebaseUser = auth.getCurrentUser();
                     String userId = firebaseUser.getUid();
-                    User user = new User(userId,userName,"defult","offline");
+                    User user = new User(userId,userName,"defult","offline","","","");
                     String key = myRef.push().getKey();
                     myRef.child(userId).setValue(user);
 

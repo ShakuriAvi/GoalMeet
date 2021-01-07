@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    android:background="@drawable/cerclebackground"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/popup_IMG_teams"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/team"/>
+    <TextView
+        android:id="@+id/popup_TXT_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="20dp"
+        android:fontFamily="serif"
+        android:textColor="@color/black"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/popup_IMG_teams"
+        android:text="You do not belong to any team, please select a team from the list of available teams looking for players and contact the team manager."/>
+</RelativeLayout>

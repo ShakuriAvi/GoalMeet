@@ -54,6 +54,12 @@ import java.util.List;
             holder.listTeam_TXT_name.setText("Name team: " + team.getName());
             holder.listTeam_TXT_city.setText("City: " + team.getCity());
             holder.listTeam_TXT_description.setText("About Team" + team.getDescription());
+
+            if(team.getFullCadre() == true)
+                holder.listTeam_TXT_avalibleAddPlayer.setText(holder.listTeam_TXT_avalibleAddPlayer.getText() + "Yes ");
+            else
+                holder.listTeam_TXT_avalibleAddPlayer.setText(holder.listTeam_TXT_avalibleAddPlayer.getText() + "No ");
+
             int id = (mInflater.getContext().getResources().getIdentifier(team.getNameSymbol(), "drawable", (mInflater.getContext().getPackageName())));
             Glide.with(mInflater.getContext()).load(id).into(holder.listTeam_IMG_symbol);
 
@@ -109,6 +115,7 @@ import java.util.List;
             TextView listTeam_TXT_name;
             TextView listTeam_TXT_description;
             TextView listTeam_TXT_nameManager;
+            TextView listTeam_TXT_avalibleAddPlayer;
 
 
             MyViewHolder(View itemView) {
@@ -118,6 +125,7 @@ import java.util.List;
                 listTeam_TXT_name = itemView.findViewById(R.id.recyclelistTeam_TXT_name);
                 listTeam_TXT_description = itemView.findViewById(R.id.recyclelistTeam_TXT_description);
                 listTeam_TXT_nameManager = itemView.findViewById(R.id.recyclelistTeam_TXT_nameManager);
+                listTeam_TXT_avalibleAddPlayer = itemView.findViewById(R.id.recyclelistTeam_TXT_avalibleAddPlayer);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

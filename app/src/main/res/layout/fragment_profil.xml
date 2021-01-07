@@ -71,21 +71,40 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.75"
                 android:src="@drawable/man_user" />
-            <TextView
-                android:id="@+id/userProfil_TXT_name"
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userProfil_ETXT_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="2.5"
-                android:text="Name Player"
-                android:textColor="@color/black"
-                android:textSize="25sp" />
+                android:hint="name player"
+                android:textColorHint="@color/black"
+                app:boxBackgroundColor="@color/cream"
+                android:layout_weight="2"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="15"
+                    android:enabled="false"
+
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/userProfil_IMG_saveName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:src="@drawable/button"/>
 
             <TextView
                 android:id="@+id/userProfil_TXT_editName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1.25"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="Edit"
                 android:textColor="@color/blue" />
@@ -105,7 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-
+            android:background="@drawable/shape"
             android:orientation="horizontal">
 
             <ImageView
@@ -134,7 +153,13 @@
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
+            <ImageView
+                android:id="@+id/userProfil_IMG_saveCity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:src="@drawable/button"/>
             <TextView
                 android:id="@+id/userProfil_TXT_editCity"
                 android:layout_width="0dp"
@@ -158,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-
+            android:background="@drawable/shape"
             android:orientation="horizontal">
 
             <ImageView
@@ -203,11 +228,12 @@
             android:layout_height="0dp"
             android:layout_weight="3"
             android:layout_marginTop="10dp"
+            android:background="@drawable/shape"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="59dp"
+                android:layout_height="58dp"
                 android:layout_weight="0.5"
 
                 android:src="@drawable/description" />
@@ -230,6 +256,13 @@
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/userProfil_IMG_saveDescription"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:src="@drawable/button"/>
 
             <TextView
                 android:id="@+id/userProfil_TXT_editDescription"

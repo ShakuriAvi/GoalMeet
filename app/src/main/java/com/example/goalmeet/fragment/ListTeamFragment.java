@@ -48,14 +48,12 @@ public class ListTeamFragment extends Fragment {
                 teamsAvailable.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Team team = snapshot.getValue(Team.class);
-                    Log.d("bbbb", "444444 " + team.getCity() + team.getNameSymbol()+team.getTheManager()+team.getDescription()+ team.getName() );
+
                     teamsAvailable.add(team);
                 }
                 fragmentlist_LST_teams = view.findViewById(R.id.fragmentlist_LST_teams);
                 fragmentlist_LST_teams.setLayoutManager(new LinearLayoutManager(getActivity()));
-                Log.d("bbbb", "33333 " );
                 Adapter_Teams adapter = new Adapter_Teams(getActivity(), teamsAvailable);
-                Log.d("bbbb", "4444" );
                 moveToProfilTeam(adapter);
                 fragmentlist_LST_teams.setAdapter(adapter);
 
@@ -74,9 +72,12 @@ public class ListTeamFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Gson gson = new Gson();
-                String teamToString = gson.toJson(teamsAvailable.get(position));
                 SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE,getActivity().MODE_PRIVATE);
+                String userName = prefs.getString("nameOfUser", null);
                 SharedPreferences.Editor editor = prefs.edit();
+                String teamToString = gson.toJson(teamsAvailable.get(position));
+                editor.putString("nameOfUser", userName);
+                Log.d("qqq"," " + userName);
                 editor.putString("theTeam" , teamToString);
                 editor.apply();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.listTeamFragment, new TeamFragment()).commit();

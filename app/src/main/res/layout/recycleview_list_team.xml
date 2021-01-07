@@ -51,7 +51,7 @@ android:layout_margin="4dp">
         android:id="@+id/recyclelistTeam_TXT_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recyclelistTeam_TXT_nameManager"
+        android:layout_below="@id/recyclelistTeam_TXT_avalibleAddPlayer"
         android:layout_toEndOf="@id/recyclelistTeam_IMG_symbol"
         android:layout_marginStart="12dp"
         android:layout_marginTop="13dp"
@@ -67,6 +67,16 @@ android:layout_margin="4dp">
         android:layout_marginStart="12dp"
         android:layout_marginTop="13dp"
         android:text="Manager: "
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/recyclelistTeam_TXT_avalibleAddPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recyclelistTeam_TXT_nameManager"
+        android:layout_toEndOf="@id/recyclelistTeam_IMG_symbol"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="13dp"
+        android:text="avalible to add player : "
         android:textSize="16sp" />
 </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

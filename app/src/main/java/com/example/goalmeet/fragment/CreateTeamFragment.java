@@ -37,6 +37,7 @@ public class CreateTeamFragment extends Fragment {
     private TextInputLayout fragmentCreate_ETXT_fullName,fragmentCreate_ETXT_city,fragmentCreate_ETXT_description;
     private Button fragmentCreate_BTN_chooseSymbol;
     private String symbolChoice;
+    private SharedPreferences prefs;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
 
@@ -120,15 +121,26 @@ public class CreateTeamFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference("teams");
 
         HashMap<String, Object> hashMap = new HashMap<>();
-
+        prefs  = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
+        String nameManager = prefs.getString("nameOfUser",null);
         hashMap.put("name", name);
         hashMap.put("city", city);
         hashMap.put("nameSymbol", idSymbol);
         hashMap.put("theManager", theManager);
         hashMap.put("description", description);
-        team = new Team(name,city,idSymbol,theManager,description);
-        reference.push().setValue(team);
+        hashMap.put("nameManager",nameManager);
+        hashMap.put("fullCadre",false);
+        hashMap.put("cadre",theManager);
+        team = new Team(name,city,idSymbol,theManager,description,nameManager,false,theManager);
+        reference.child(name).setValue(team);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
 
+        reference=FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
+        HashMap<String, Object> hashMapUsers = new HashMap<>();
+        hashMapUsers.put("nameClub",name);
+        reference.updateChildren(hashMapUsers);
 
 
     }
