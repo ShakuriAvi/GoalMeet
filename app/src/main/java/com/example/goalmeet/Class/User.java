@@ -8,9 +8,10 @@ public class User {
     private String userName;
     private String imageURL;
     private String status;
-    public User(){}
+    private boolean isManager;
 
-    public User(String id, String userName,String imageURL,String status,String city,String nameClub,String description) {
+    public User(){}
+    public User(String id, String userName, String imageURL, String status, String city, String nameClub, String description, boolean isManager) {
         this.id = id;
         this.userName = userName;
         this.imageURL = imageURL;
@@ -18,6 +19,7 @@ public class User {
         this.city =city;
         this.nameClub = nameClub;
         this.description = description;
+        this.isManager = isManager;
     }
 
     public String getId() {
@@ -68,5 +70,13 @@ public class User {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void setManager(boolean manager) {
+        isManager = manager;
     }
 }

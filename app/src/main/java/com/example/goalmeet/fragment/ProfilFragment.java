@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.goalmeet.Activity.MessageActivity;
 import com.example.goalmeet.Class.RequestJoin;
 import com.example.goalmeet.Class.User;
-import com.example.goalmeet.Controller.ControllerUserInHisProfile;
 import com.example.goalmeet.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,15 +51,14 @@ import static com.example.goalmeet.Other.Constants.SP_FILE;
 public class ProfilFragment extends Fragment {
 
     private TextView  userProfil_TXT_editSymbol, userProfil_TXT_editDescription,userProfil_TXT_editCity,userProfil_TXT_editName ;
-    private ImageView userProfil_IMG_symbol, userProfil_IMG_saveDescription, userProfil_IMG_saveCity, userProfil_IMG_saveName;
+    private ImageView userProfil_IMG_symbol, userProfil_IMG_saveDescription, userProfil_IMG_saveCity, userProfil_IMG_saveName,userProfil_IMG_message;
     String userId;
-    private ControllerUserInHisProfile userInHisProfile;
     private User user;
-    private TextInputLayout userProfil_ETXT_description,userProfil_ETXT_name, userProfil_ETXT_city ;
+    private TextInputLayout userProfil_ETXT_description,userProfil_ETXT_name, userProfil_ETXT_city ,userProfil_ETXT_myTeam;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
     private StorageReference storageReference;
-    private ValueEventListener valueEventListener;
+    private ValueEventListener listenerAnswerRequest,lisitenerGuest;
     private static final int IMAGE_REQUEST = 1;
     private Uri imageUri;
     View view;
@@ -69,10 +69,10 @@ public class ProfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profil, container, false);
-
         initView();
         getDataFromSharedPreferences();
-        checkRequest();
+        permissionUser();
+        Log.d("pppp","1111 ");
         return view;
     }
 
@@ -89,6 +89,8 @@ public class ProfilFragment extends Fragment {
         userProfil_IMG_saveDescription = view.findViewById(R.id.userProfil_IMG_saveDescription);
         userProfil_IMG_saveCity = view.findViewById(R.id.userProfil_IMG_saveCity);
         userProfil_IMG_saveName = view.findViewById(R.id.userProfil_IMG_saveName);
+        userProfil_IMG_message = view.findViewById(R.id.userProfil_IMG_message);
+        userProfil_ETXT_myTeam = view.findViewById(R.id.userProfil_ETXT_myTeam);
     }
 
     private void getDataFromSharedPreferences() {
@@ -99,53 +101,51 @@ public class ProfilFragment extends Fragment {
         editor.commit();
     }
 
-    private void checkRequest() {//check if there is confirm from manager's clubs
-        reference = FirebaseDatabase.getInstance().getReference("requestJoin");
-        valueEventListener = reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RequestJoin requestJoin = snapshot.getValue(RequestJoin.class);
-                    if (requestJoin.getSender().equals(firebaseUser.getUid())) {
-                        if (requestJoin.getSeen() == true) {
-                            mDialog.setContentView(R.layout.popup);
-                            TextView popup_TXT_answer = mDialog.findViewById(R.id.popup_TXT_answer);
-                            if (requestJoin.getConfirmApplication() == true) {
-                                popup_TXT_answer.setText("The club manager has approved you, welcome to " + requestJoin.getNameTeam());
-                                mDialog.getWindow();
-                                mDialog.show();
-                                //     user.setNameClub("");
-                            } else {
-                                popup_TXT_answer.setText("The " + requestJoin.getNameTeam() + " group manager has not confirmed your joining, please contact the group manager via message or try another group"
-                                        + requestJoin.getNameTeam());
+    private void permissionUser() {
+        if(userId == null) {//for user in her profile
+            reference = FirebaseDatabase.getInstance().getReference("requestJoin"); //check if there is confirm from manager's clubs
+            listenerAnswerRequest = reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        RequestJoin request = snapshot.getValue(RequestJoin.class);
+                        if (request.getSender().equals(firebaseUser.getUid()) ) { // it's request to join group
+                            if (request.getSeen() == true) {
+                                getMessageDialog(snapshot, request, "Congratulations!! " + request.getNameTeam() + " have added you to their group. Good luck.",
+                                        request.getNameTeam() + " did not approve your request to join. Please notify the team manager or look for a new group in the available groups");
                             }
                         }
-                        break;
                     }
+
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        checkWhoUser();
-    }
-
-    private void checkWhoUser() {//check if user he is guest or visit in his profile
-        if (userId == null) { //UserInHisProfile();
-//            userInHisProfile = new ControllerUserInHisProfile(getContext());
-//            userInHisProfile.manageProfile();
+                }
+            });
             UserInHisProfil();
-        } else {
-            userInelseProfil();
-        }
-
+        }else
+            userInElseProfil();
     }
 
+private void getMessageDialog(DataSnapshot snapshot,RequestJoin request,String confirm, String refused){
 
+        mDialog.setContentView(R.layout.popup_status_myteam);
+        TextView popup_TXT_answer = mDialog.findViewById(R.id.popup_TXT_answer);
+        if (request.getConfirmApplication() == true) {
+            popup_TXT_answer.setText(confirm);
+            mDialog.getWindow();
+            mDialog.show();
+            //     user.setNameClub("");
+        } else {
+            popup_TXT_answer.setText(refused);
+            mDialog.getWindow();
+            mDialog.show();
+        }
+        snapshot.getRef().removeValue();
+
+}
 
     private void UserInHisProfil() {
         //profil Image reference in storage
@@ -158,6 +158,7 @@ public class ProfilFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 readDataOfUserFromFireBase(dataSnapshot);
+
             }
 
             @Override
@@ -167,21 +168,28 @@ public class ProfilFragment extends Fragment {
         });
 
         userProfil_TXT_editSymbol.setPaintFlags(userProfil_TXT_editSymbol.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        clickOnEdit();
+        clickOnEditHisProfile();
+
     }
 
-    private void userInelseProfil() {
+    private void userInElseProfil() {
+
         reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
-        reference.addValueEventListener(new ValueEventListener() {
+
+        Log.d("pppp"," "+reference);
+        lisitenerGuest = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 readDataOfUserFromFireBase(dataSnapshot);
+                clickOnOtherProfile();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
         });
 
     }
@@ -193,7 +201,11 @@ public class ProfilFragment extends Fragment {
         }
         userProfil_ETXT_name.setHint(user.getUserName());
         userProfil_ETXT_city.setHint(user.getCity());
-        userProfil_ETXT_description.setHint(user.getDescription());
+        userProfil_ETXT_description.setHint("Name Team: "+ user.getDescription());
+        if(user.getNameClub().equals(""))
+            userProfil_ETXT_myTeam.setHint("Name Team: None");
+        else
+            userProfil_ETXT_myTeam.setHint("Name Team: " +user.getNameClub());
     }
 
 
@@ -263,7 +275,7 @@ public class ProfilFragment extends Fragment {
 
     }
 
-    public void clickOnEdit() {//for user in his profile
+    public void clickOnEditHisProfile() {//for user in his profile
         userProfil_TXT_editSymbol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -324,6 +336,18 @@ public class ProfilFragment extends Fragment {
             }
         });
     }
+    private void clickOnOtherProfile(){
+        userProfil_IMG_message.setVisibility(View.VISIBLE);
+        userProfil_IMG_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MessageActivity.class);
+                i.putExtra("userId",user.getId());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(i);
+            }
+        });
+    }
 private void changeAttributeInFireBase(String key,String value){
     reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
     HashMap<String,Object> map = new HashMap<>();
@@ -351,6 +375,8 @@ private void changeAttributeInFireBase(String key,String value){
     @Override
     public void onDestroy() {
         super.onDestroy();
-        reference.removeEventListener(valueEventListener);
+        reference.removeEventListener(listenerAnswerRequest);
+        if(lisitenerGuest!=null)
+            reference.removeEventListener(lisitenerGuest);
     }
 }

@@ -48,37 +48,6 @@ public class CreateTeamFragment extends Fragment {
         initTeam();
         return view;
     }
-
-    private void initTeam() {
-
-        fragmentCreate_BTN_chooseSymbol.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                String fullName = fragmentCreate_ETXT_fullName.getEditText().getText().toString();
-                String city = fragmentCreate_ETXT_city.getEditText().getText().toString();
-                String description = fragmentCreate_ETXT_description.getEditText().getText().toString();
-                if (city.equals(null) || fullName.equals(null) || symbolChoice.equals(null))
-                    Toast.makeText(getActivity(), "Please Fill All Fields", Toast.LENGTH_SHORT).show();
-
-
-                else {
-
-                    createNewTeam(fullName, city, symbolChoice, firebaseUser.getUid(), description);
-                    Gson gson = new Gson();
-                    String teamToString = gson.toJson(team);
-                    SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE,getActivity().MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("theTeam" , teamToString);
-                    editor.apply();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.CreateTeamFragment, new TeamFragment()).commit();
-                }
-            }
-
-        });
-
-    }
-
     private void initFindView(View view) {
         getNameSymbol(view);
 
@@ -106,6 +75,37 @@ public class CreateTeamFragment extends Fragment {
 
 
     }
+    private void initTeam() {
+
+        fragmentCreate_BTN_chooseSymbol.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String fullName = fragmentCreate_ETXT_fullName.getEditText().getText().toString();
+                String city = fragmentCreate_ETXT_city.getEditText().getText().toString();
+                String description = fragmentCreate_ETXT_description.getEditText().getText().toString();
+                if (city.equals(null) || fullName.equals(null) || symbolChoice.equals(null))
+                    Toast.makeText(getActivity(), "Please Fill All Fields", Toast.LENGTH_SHORT).show();
+
+
+                else {
+                    createNewTeam(fullName, city, symbolChoice, firebaseUser.getUid(), description);
+                    Gson gson = new Gson();
+                    String teamToString = gson.toJson(team);
+                    SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE,getActivity().MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("pressOnTeam" , teamToString);
+                    editor.putBoolean("userIsManager",true);
+                    editor.apply();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.CreateTeamFragment, new TeamFragment()).commit();
+                }
+            }
+
+        });
+
+    }
+
+
 
     private void getNameSymbol(View view) {
         nameSymbol = new ArrayList<>();
@@ -140,6 +140,7 @@ public class CreateTeamFragment extends Fragment {
         reference=FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
         HashMap<String, Object> hashMapUsers = new HashMap<>();
         hashMapUsers.put("nameClub",name);
+        hashMapUsers.put("isManager",true);
         reference.updateChildren(hashMapUsers);
 
 

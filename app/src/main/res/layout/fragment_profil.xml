@@ -20,7 +20,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/team_IMG_message"
+                android:id="@+id/userProfil_IMG_message"
                 android:layout_width="69dp"
                 android:layout_height="0dp"
                 android:layout_gravity="right"
@@ -80,6 +80,7 @@
                 android:hint="name player"
                 android:textColorHint="@color/black"
                 app:boxBackgroundColor="@color/cream"
+                android:enabled="false"
                 android:layout_weight="2"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp">
@@ -139,6 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:hint="City:"
                 android:textColorHint="@color/black"
                 app:boxBackgroundColor="@color/cream"
@@ -194,11 +196,12 @@
                 android:src="@drawable/football_club" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/userProfil_TXT_myTeam"
+                android:id="@+id/userProfil_ETXT_myTeam"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Name Club:"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:layout_weight="2.5"
                 android:textColorHint="@color/black"
                 app:boxBackgroundColor="@color/cream"
@@ -242,6 +245,7 @@
                 android:id="@+id/userProfil_ETXT_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:hint="About Me:"
                 android:textColorHint="@color/black"
                 app:boxBackgroundColor="@color/cream"

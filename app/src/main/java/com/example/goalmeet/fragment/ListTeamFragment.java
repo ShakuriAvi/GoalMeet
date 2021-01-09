@@ -78,7 +78,7 @@ public class ListTeamFragment extends Fragment {
                 String teamToString = gson.toJson(teamsAvailable.get(position));
                 editor.putString("nameOfUser", userName);
                 Log.d("qqq"," " + userName);
-                editor.putString("theTeam" , teamToString);
+                editor.putString("pressOnTeam" , teamToString);
                 editor.apply();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.listTeamFragment, new TeamFragment()).commit();
             }

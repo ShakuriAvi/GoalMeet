@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,7 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.goalmeet.Class.RequestJoin;
 import com.example.goalmeet.Class.User;
 import com.example.goalmeet.R;
 import com.example.goalmeet.fragment.ChatsFragment;
@@ -32,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 
@@ -116,16 +115,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_ITEM_myTeam:
 
                 if (!user.getNameClub().equals("")) {
-                    String teamToString = user.getNameClub();
+                    Gson gson = new Gson();
+                    String userToString = gson.toJson(user);
                     prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
                     editor = prefs.edit();
-                    editor.putString("theTeamFromMainActivity", teamToString);
+
+                    editor.putString("theUserFromMainActivity", userToString);
                     editor.putString("nameOfUser", user.getUserName());
                     editor.apply();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TeamFragment()).commit();
 
                 } else {
-                    mDialog.setContentView(R.layout.popup);
+                    mDialog.setContentView(R.layout.popup_status_myteam);
                     mDialog.getWindow();
                     mDialog.show();
 
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_ITEM_avalibaleTeam:
                 prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
                 editor = prefs.edit();
-                Log.d("qqq"," " + user.getUserName());
+                editor.putBoolean("userIsManager",user.getIsManager());
                 editor.putString("nameOfUser", user.getUserName());
                 editor.apply();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListTeamFragment()).commit();

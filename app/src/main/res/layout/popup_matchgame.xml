@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    android:background="@drawable/cerclebackground"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/popupInvite_IMG_teams"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/support__1_"/>
+    <TextView
+        android:id="@+id/popupInvite_TXT_teams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="20dp"
+        android:fontFamily="serif"
+        android:textColor="@color/black"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/popupInvite_IMG_teams"
+        android:text=" You have a new request to meet with team. Arr yot approve?"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/popupInvite_TXT_teams"
+        android:layout_marginTop="80dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/popupInvite_BTN_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/green"
+            android:text="confirm"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/popupInvite_BTN_showTeam"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_gray"
+            android:text="show team"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/popupInvite_BTN_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:text="remove"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</RelativeLayout>

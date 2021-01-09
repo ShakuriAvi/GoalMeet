@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.goalmeet.Class.User;
 import com.example.goalmeet.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -74,7 +72,7 @@ public class RegistryActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     FirebaseUser firebaseUser = auth.getCurrentUser();
                     String userId = firebaseUser.getUid();
-                    User user = new User(userId,userName,"defult","offline","","","");
+                    User user = new User(userId,userName,"defult","offline","","","", false);
                     String key = myRef.push().getKey();
                     myRef.child(userId).setValue(user);
 

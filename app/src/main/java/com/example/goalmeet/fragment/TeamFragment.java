@@ -26,6 +26,7 @@ import com.example.goalmeet.Activity.MessageActivity;
 import com.example.goalmeet.Adapter.Adapter_SymbolTeam;
 import com.example.goalmeet.Class.RequestJoin;
 import com.example.goalmeet.Class.Team;
+import com.example.goalmeet.Class.User;
 import com.example.goalmeet.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,30 +45,34 @@ import static com.example.goalmeet.Other.Constants.SP_FILE;
 
 public class TeamFragment extends Fragment {
     private Gson gson;
-    private  Team team;
+    private Team team;
+    private User user;
     private RequestJoin newRequestJoin;
-    private Dialog mDialog;
+    private Dialog dialogNewRequsetJoin, dialogNewMatchGame;
+
     private RecyclerView.LayoutManager layoutManager;
-    private String nameUser;
+    private String nameUser, nameClubCurrentUser;
+    boolean isManager;
     private RecyclerView fragmentSymbol_LST_teams;
     private ArrayList<String> nameSymbols;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
     private SharedPreferences prefs;
     private LinearLayout team_LAY_addPlayer;
-    private Button team_BTN_message , popuprequset_BTN_confirm,popuprequset_BTN_showProfil,popuprequset_BTN_remove;
-    private ImageView team_IMG_symbol,team_IMG_addPlayer,team_IMG_saveDescription,team_IMG_saveCity,team_IMG_message;
-    private TextInputLayout team_ETXT_city,team_ETXT_description,team_ETXT_addPlayer,team_ETXT_name;
-    private TextView team_TXT_playerTeam,team_TXT_nameManager,team_TXT_editSymbol,team_TXT_editCity,team_TXT_editPlayer,team_TXT_editDescription,popuprequset_TXT_teams,popup_TXT_answer;
+    private Button team_BTN_requestJoin, popuprequset_BTN_confirm, popuprequset_BTN_showProfil, popuprequset_BTN_remove, team_BTN_inviteGame;
+    private ImageView team_IMG_symbol, team_IMG_addPlayer, team_IMG_saveDescription, team_IMG_saveCity, team_IMG_message;
+    private TextInputLayout team_ETXT_city, team_ETXT_description, team_ETXT_addPlayer, team_ETXT_name;
+    private TextView team_TXT_playerTeam, team_TXT_nameManager, team_TXT_editSymbol, team_TXT_editCity, team_TXT_editPlayer, team_TXT_editDescription, popuprequset_TXT_teams, popup_TXT_answer;
     private Switch team_SWITCH_searchPlayer;
     private ArrayList<TextView> arrayOfPermissiomEdit;
     private ArrayList<TextInputLayout> arrayEditETXT;
     private boolean availableToNewPlayer = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team, container, false);
         getActivity().getFragmentManager().popBackStack();
-        mDialog = new Dialog(getActivity());
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         initView(view);
 
@@ -75,29 +80,20 @@ public class TeamFragment extends Fragment {
     }
 
 
-
-
     private void getTeamFromJson(View view) {
         gson = new Gson();
-        prefs  = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
-        String json = prefs.getString("theTeam", null);
-        if(json !=null) {
-            team = gson.fromJson(json, Team.class);
-            nameUser = prefs.getString("nameOfUser",null);
-            Log.d("qqq"," " + nameUser);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.clear();
-            editor.commit();
+        prefs = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
+        isManager = prefs.getBoolean("userIsManager", false);
+        nameUser = prefs.getString("nameOfUser", null);
+        String pressOnTeam = prefs.getString("pressOnTeam", null);
+        if (pressOnTeam != null) {//if user arrive to fragment from listTeamFragment or createTeamFragment
+            team = gson.fromJson(pressOnTeam, Team.class);
             initUi(view);
-        }else{
+        } else {//if user arrive to fragment from Main Activity (from nav)
 
-            nameUser = prefs.getString("nameOfUser",null);
-            Log.d("qqq"," " + nameUser);
-            String path = prefs.getString("theTeamFromMainActivity", null);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.clear();
-            editor.commit();
-            reference = FirebaseDatabase.getInstance().getReference("teams").child(path);
+            String userToString = prefs.getString("theUserFromMainActivity", null);
+            user = gson.fromJson(userToString, User.class);
+            reference = FirebaseDatabase.getInstance().getReference("teams").child(user.getNameClub());
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -111,27 +107,32 @@ public class TeamFragment extends Fragment {
                 }
             });
         }
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
 
 
     }
-private void initUi(View view ){
-    nameSymbols(view);
-    initTeamInView();
-    permisionToUser(view);
-}
+
+    private void initUi(View view) {
+        nameSymbols(view);
+        initTeamInView();
+        permisionToUser(view);
+    }
+
     private void initView(View view) {
 
         arrayOfPermissiomEdit = new ArrayList<>();
         arrayEditETXT = new ArrayList<>();
 
-        team_TXT_editCity= view.findViewById(R.id.team_TXT_editCity);
+        team_TXT_editCity = view.findViewById(R.id.team_TXT_editCity);
         team_ETXT_city = view.findViewById(R.id.team_ETXT_city);
         team_IMG_saveCity = view.findViewById(R.id.team_IMG_saveCity);
         arrayOfPermissiomEdit.add(team_TXT_editCity);
         arrayEditETXT.add(team_ETXT_city);
 
         team_TXT_nameManager = view.findViewById(R.id.team_TXT_nameManager);
-        team_ETXT_name= view.findViewById(R.id.team_ETXT_name);
+        team_ETXT_name = view.findViewById(R.id.team_ETXT_name);
 
         team_LAY_addPlayer = view.findViewById(R.id.team_LAY_addPlayer);
         team_TXT_playerTeam = view.findViewById(R.id.team_TXT_playerTeam);
@@ -141,17 +142,18 @@ private void initUi(View view ){
         arrayOfPermissiomEdit.add(team_TXT_editPlayer);
         arrayEditETXT.add(team_ETXT_addPlayer);
 
-        team_BTN_message = view.findViewById(R.id.team_BTN_message);
-        team_IMG_message=view.findViewById(R.id.team_IMG_message);
+        team_BTN_inviteGame = view.findViewById(R.id.team_BTN_inviteGame);
+        team_BTN_requestJoin = view.findViewById(R.id.team_BTN_requestJoin);
+        team_IMG_message = view.findViewById(R.id.team_IMG_message);
         team_IMG_symbol = view.findViewById(R.id.team_IMG_symbol);
-        team_TXT_editSymbol= view.findViewById(R.id.team_TXT_editSymbol);
+        team_TXT_editSymbol = view.findViewById(R.id.team_TXT_editSymbol);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         fragmentSymbol_LST_teams = view.findViewById(R.id.fragmentSymbol_LST_teams);
         fragmentSymbol_LST_teams.setLayoutManager(layoutManager);
         arrayOfPermissiomEdit.add(team_TXT_editSymbol);
 
-        team_TXT_editDescription= view.findViewById(R.id.team_TXT_editDescription);
-        team_ETXT_description= view.findViewById(R.id.team_ETXT_description);
+        team_TXT_editDescription = view.findViewById(R.id.team_TXT_editDescription);
+        team_ETXT_description = view.findViewById(R.id.team_ETXT_description);
         team_IMG_saveDescription = view.findViewById(R.id.team_IMG_saveDescription);
         arrayOfPermissiomEdit.add(team_TXT_editDescription);
         arrayEditETXT.add(team_ETXT_description);
@@ -161,11 +163,12 @@ private void initUi(View view ){
         getTeamFromJson(view);
 
     }
+
     private void initTeamInView() {
-        Log.d("mmmm","1111");
+        Log.d("mmmm", "1111");
         Glide.with(this).load((getResources().getIdentifier(team.getNameSymbol(), "drawable", getContext().getPackageName()))).into(team_IMG_symbol);
         team_ETXT_name.setHint(" Name Club: " + team.getName());
-        team_ETXT_city.setHint("City: " +team.getCity());
+        team_ETXT_city.setHint("City: " + team.getCity());
         team_ETXT_description.setHint("About Team: " + team.getDescription());
         team_TXT_nameManager.setText("Name Manager: " + team.getNameManager());
         team_SWITCH_searchPlayer.setChecked(team.getFullCadre());
@@ -177,85 +180,117 @@ private void initUi(View view ){
 
     private void permisionToUser(View view) {
 
-        if(!firebaseUser.getUid().equals(team.getTheManager())){
+        if (!firebaseUser.getUid().equals(team.getTheManager())) {
+
+
+            if (!user.getNameClub().equals(team.getName()) && !user.getIsManager()) {//if the user is guest but don't manager of other teams
+                team_BTN_requestJoin.setVisibility(View.VISIBLE);
+            } else if(user.getIsManager()){//if user is'nt manager of this team but he manager of other team
+                team_BTN_inviteGame.setVisibility(View.VISIBLE);
+            }
+
 
             for (int i = 0; i < arrayOfPermissiomEdit.size(); i++) {
                 arrayOfPermissiomEdit.get(i).setVisibility(View.GONE);
 
             }
-            for (int i = 0; i <arrayEditETXT.size() ; i++) {
+            for (int i = 0; i < arrayEditETXT.size(); i++) {
                 arrayEditETXT.get(i).setEnabled(false);
             }
+
             team_SWITCH_searchPlayer.setEnabled(false);
             team_IMG_message.setVisibility(View.VISIBLE);
-            team_BTN_message.setVisibility(View.VISIBLE);
             clickOnButtonGuest();
 
+    }else{//if the user is the manager of team
+        dialogNewRequsetJoin = new Dialog(getActivity());
+        dialogNewRequsetJoin.setContentView(R.layout.popup_user_request_join);
+        popuprequset_BTN_remove = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_remove);
+        popuprequset_BTN_showProfil = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_showProfil);
+        popuprequset_BTN_confirm = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_confirm);
+        popuprequset_TXT_teams = dialogNewRequsetJoin.findViewById(R.id.popuprequset_TXT_teams);
+        clickOnEditManager(); // if the user is manager
+        reference = FirebaseDatabase.getInstance().getReference("requestJoin");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    newRequestJoin = snapshot.getValue(RequestJoin.class);
 
-        }else{
-            mDialog.setContentView(R.layout.popup_user_request_join);
-            popuprequset_BTN_remove = mDialog.findViewById(R.id.popuprequset_BTN_remove);
-            popuprequset_BTN_showProfil = mDialog.findViewById(R.id.popuprequset_BTN_showProfil);
-            popuprequset_BTN_confirm = mDialog.findViewById(R.id.popuprequset_BTN_confirm);
-            popuprequset_TXT_teams = mDialog.findViewById(R.id.popuprequset_TXT_teams);
-            clickOnEditManager(); // if the user is manager
-            reference = FirebaseDatabase.getInstance().getReference("requestJoin");
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        newRequestJoin = snapshot.getValue(RequestJoin.class);
-
-                        if(newRequestJoin.getReceiver().equals(snapshot.getKey()) && newRequestJoin.getSeen() == false){
-                            mDialog.getWindow();
-                            mDialog.show();
-                            popuprequset_TXT_teams.setText(" You have a new request to join from " + newRequestJoin.getNameSender() + ". Do you approve? ");
-                            break;
-                        }
+                    if (newRequestJoin.getReceiver().equals(snapshot.getKey()) && newRequestJoin.getSeen() == false) {
+                        dialogNewRequsetJoin.getWindow();
+                        dialogNewRequsetJoin.show();
+                        popuprequset_TXT_teams.setText(" You have a new request to join from " + newRequestJoin.getNameSender() + ". Do you approve? ");
+                        break;
                     }
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-        }
-    }
-    private void clickOnButtonGuest(){
-  team_IMG_message.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(getActivity(), MessageActivity.class);
-            i.putExtra("userId",team.getTheManager());
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            getActivity().startActivity(i);
-
-        }
+            }
         });
-        team_BTN_message.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            sendRequestToJoin(firebaseUser.getUid(),team.getTheManager(),nameUser);
-            team_BTN_message.setEnabled(false);
-            Toast.makeText(getActivity(), "Application to join send", Toast.LENGTH_SHORT).show();
-        }
+    }
+
+}
+
+    private void clickOnButtonGuest() {
+        team_IMG_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MessageActivity.class);
+                i.putExtra("userId", team.getTheManager());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(i);
+
+            }
+        });
+        team_BTN_requestJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequestToJoin(firebaseUser.getUid(), team.getTheManager(), nameUser);
+                team_BTN_requestJoin.setEnabled(false);
+                Toast.makeText(getActivity(), "request to join send", Toast.LENGTH_SHORT).show();
+            }
+        });
+        team_BTN_inviteGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                team_BTN_inviteGame.setEnabled(false);
+                sendInviteGame();
+                Toast.makeText(getActivity(), "request for match game send", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
 
     }
-    private void sendRequestToJoin(String sender, String receiver,String nameSender) {
+    private void sendInviteGame(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("inviteGame");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("sender", user.getId());
+        hashMap.put("receiver",team.getTheManager());
+        hashMap.put("fromTeam",user.getNameClub());
+        hashMap.put("toTeam",team.getName());
+        hashMap.put("seen", false);
+        hashMap.put("confirmApplication", false);
+        RequestMatch requestMatch = new RequestMatch(user.getId(),team.getTheManager(),user.getNameClub(),team.getName(),false,false);
+        reference.child(team.getTheManager()).setValue(requestMatch);
+    }
+    private void sendRequestToJoin(String sender, String receiver, String nameSender) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("requestJoin");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
-        hashMap.put("team" , team.getName());
-        hashMap.put("seen",false);
-        hashMap.put("confirmApplication",false);
-        hashMap.put("nameSender",nameSender);
-        RequestJoin requestJoin = new RequestJoin(sender,receiver,false,false, nameSender,team.getName());
+        hashMap.put("team", team.getName());
+        hashMap.put("seen", false);
+        hashMap.put("confirmApplication", false);
+        hashMap.put("nameSender", nameSender);
+        RequestJoin requestJoin = new RequestJoin(sender, receiver, false, false, nameSender, team.getName());
         reference.child(receiver).setValue(requestJoin);
     }
+
 
     private void clickOnEditManager() {
 
@@ -273,7 +308,7 @@ private void initUi(View view ){
                 team_ETXT_city.setHint(team.getCity());
                 team_ETXT_city.setEnabled(false);
                 team_IMG_saveCity.setVisibility(View.GONE);
-                changeAttributeInFireBase("city",team.getCity());
+                changeAttributeInFireBase("city", team.getCity());
             }
         });
 
@@ -281,8 +316,8 @@ private void initUi(View view ){
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 reference = FirebaseDatabase.getInstance().getReference("teams").child(team.getName());
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("fullCadre",isChecked);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("fullCadre", isChecked);
                 reference.updateChildren(map);
             }
         });
@@ -303,7 +338,7 @@ private void initUi(View view ){
                 team_ETXT_description.setHint(team.getName());
                 team_ETXT_description.setEnabled(false);
                 team_IMG_saveDescription.setVisibility(View.GONE);
-                changeAttributeInFireBase("description",team.getDescription());
+                changeAttributeInFireBase("description", team.getDescription());
             }
         });
 
@@ -316,10 +351,10 @@ private void initUi(View view ){
         team_IMG_addPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                team.setCadre(team.getCadre()  + ", " + team_ETXT_addPlayer.getEditText().getText().toString());
-                team_TXT_playerTeam.setText("player name" + team.getCadre());
+                team.setCadre(team.getCadre() + ", " + team_ETXT_addPlayer.getEditText().getText().toString());
+                team_TXT_playerTeam.setText("player name : " + team.getCadre());
                 team_LAY_addPlayer.setVisibility(View.GONE);
-                changeAttributeInFireBase("cadre",team.getCadre());
+                changeAttributeInFireBase("cadre", team.getCadre());
             }
         });
 
@@ -335,7 +370,7 @@ private void initUi(View view ){
                         team.setNameSymbol(nameSymbols.get(position));
                         Toast.makeText(getActivity(), "A group is selected", Toast.LENGTH_SHORT).show();
                         team_IMG_symbol.setImageResource(getResources().getIdentifier(nameSymbols.get(position), "drawable", getContext().getPackageName()));
-                        changeAttributeInFireBase("nameSymbol",team.getNameSymbol());
+                        changeAttributeInFireBase("nameSymbol", team.getNameSymbol());
                         fragmentSymbol_LST_teams.setVisibility(View.GONE);
                     }
                 });
@@ -346,48 +381,54 @@ private void initUi(View view ){
         popuprequset_BTN_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFromMenagerAnswer(true,true);
-                mDialog.dismiss();
-                reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("nameClub",team.getName());
+                updateFromManagerAnswer(true, true);
+
+                team.setCadre(team.getCadre() + ", " + newRequestJoin.getNameSender());
+                changeAttributeInFireBase("cadre", team.getCadre());
+                team_TXT_playerTeam.setText("player name : " + team.getCadre());
+                dialogNewRequsetJoin.dismiss();
+                reference = FirebaseDatabase.getInstance().getReference("users").child(newRequestJoin.getSender());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("nameClub", team.getName());
                 reference.updateChildren(map);
-                changeAttributeInFireBase("cadre",team.getCadre()+ ", " + newRequestJoin.getNameSender() );
             }
         });
         popuprequset_BTN_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFromMenagerAnswer(true,false);
-                mDialog.dismiss();
+                updateFromManagerAnswer(true, false);
+                dialogNewRequsetJoin.dismiss();
             }
         });
         popuprequset_BTN_showProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE,getActivity().MODE_PRIVATE);
+                SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("userId",newRequestJoin.getSender());
+                editor.putString("userId", newRequestJoin.getSender());
                 editor.apply();
-                mDialog.dismiss();
+                dialogNewRequsetJoin.dismiss();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.teamFragment, new ProfilFragment()).commit();
             }
         });
     }
-    private void changeAttributeInFireBase(String key,String value){
+
+    private void changeAttributeInFireBase(String key, String value) {
         reference = FirebaseDatabase.getInstance().getReference("teams").child(team.getName());
-        HashMap<String,Object> map = new HashMap<>();
-        map.put(key,value);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(key, value);
         reference.updateChildren(map);
     }
-    private void updateFromMenagerAnswer(boolean seen,boolean confirmApplication){
+
+    private void updateFromManagerAnswer(boolean seen, boolean confirmApplication) {
         reference = FirebaseDatabase.getInstance().getReference("requestJoin").child(team.getTheManager());
-        HashMap<String,Object> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("seen", seen);
-        hashMap.put("confirmApplication",confirmApplication);
+        hashMap.put("confirmApplication", confirmApplication);
         reference.updateChildren(hashMap);
     }
+
     private void nameSymbols(View view) {
         nameSymbols = new ArrayList<>();
         for (int i = 1; i < 31; i++) {
