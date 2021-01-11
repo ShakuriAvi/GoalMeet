@@ -2,11 +2,11 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:showIn="navigation_view"
-    
+
     tools:ignore="ExtraText">
     <group android:checkableBehavior="single">
         <item
-            android:title="About">
+            android:title="About Me">
             <menu>
                 <item
                     android:id="@+id/nav_ITEM_myProfil"
@@ -17,10 +17,23 @@
                     android:id="@+id/nav_ITEM_myTeam"
                     android:title="My Team"
                     android:icon="@drawable/football_club"/>
+
+            </menu>
+        </item>
+
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:title="Transfers window">
+            <menu>
                 <item
                     android:id="@+id/nav_ITEM_avalibaleTeam"
                     android:title="Available Team"
                     android:icon="@drawable/loupe"/>
+                <item
+                    android:id="@+id/nav_ITEM_games"
+                    android:title="Games"
+                    android:icon="@drawable/scoreboard__2_"/>
                 <item
                     android:id="@+id/nav_ITEM_createTeam"
                     android:title="Create Team"
@@ -32,8 +45,12 @@
     <group android:checkableBehavior="single">
 <item android:title="Other">
     <menu>
-        <item android:title="Users"
-            android:id="@+id/nav_ITEM_users"/>
+        <item android:title="Players"
+            android:id="@+id/nav_ITEM_players"
+            android:icon="@drawable/football_players"/>
+        <item android:title="Requests"
+            android:id="@+id/nav_ITEM_requests"
+            android:icon="@drawable/notification"/>
         <item android:title="Chat"
             android:id="@+id/nav_ITEM_chats"
             android:icon="@drawable/speech_bubble"/>

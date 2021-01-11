@@ -130,7 +130,7 @@ public class CreateTeamFragment extends Fragment {
         hashMap.put("description", description);
         hashMap.put("nameManager",nameManager);
         hashMap.put("fullCadre",false);
-        hashMap.put("cadre",theManager);
+        hashMap.put("cadre",nameManager);
         team = new Team(name,city,idSymbol,theManager,description,nameManager,false,theManager);
         reference.child(name).setValue(team);
         SharedPreferences.Editor editor = prefs.edit();

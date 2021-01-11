@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,12 +15,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.goalmeet.Class.User;
 import com.example.goalmeet.R;
 import com.example.goalmeet.fragment.ChatsFragment;
 import com.example.goalmeet.fragment.CreateTeamFragment;
+import com.example.goalmeet.fragment.GamesFragment;
 import com.example.goalmeet.fragment.ListTeamFragment;
 import com.example.goalmeet.fragment.ProfilFragment;
+import com.example.goalmeet.fragment.RequestsFragment;
 import com.example.goalmeet.fragment.TeamFragment;
 import com.example.goalmeet.fragment.UsersFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -41,13 +45,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser firebaseUser;
     private Toolbar activity_toolbar;
     private DatabaseReference myRef;
+    private Gson gson = new Gson();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private SharedPreferences prefs;
-    private  SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor;
+    private ValueEventListener myValueEventListener;
     private User user;
     private Dialog mDialog;
     private String userId;
+    private ImageView header_IMG_profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +66,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initView();
         if (savedInstanceState == null) {
             myRef = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-            myRef.addValueEventListener(new ValueEventListener() {
+            myValueEventListener = myRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     user = dataSnapshot.getValue(User.class);
+//                    if (user.getImageURL().equals("defult"))
+//                        header_IMG_profile.setImageResource(R.drawable.user);
+//                    else
+//                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(header_IMG_profile);
                     String teamToString = user.getNameClub();
                     prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
                     editor = prefs.edit();
@@ -88,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(activity_toolbar);
         mDialog = new Dialog(this);
         drawerLayout = findViewById(R.id.drawer_layout);
+        header_IMG_profile = findViewById(R.id.header_IMG_profile);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, activity_toolbar, R.string.Navigation_drawer_open, R.string.Navigation_drawer_close);
@@ -120,8 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
                     editor = prefs.edit();
 
-                    editor.putString("theUserFromMainActivity", userToString);
-                    editor.putString("nameOfUser", user.getUserName());
+                    editor.putString("theUser", userToString);
                     editor.apply();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TeamFragment()).commit();
 
@@ -137,14 +148,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_ITEM_avalibaleTeam:
+                Gson gson = new Gson();
+                String userToString = gson.toJson(user);
                 prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
                 editor = prefs.edit();
-                editor.putBoolean("userIsManager",user.getIsManager());
-                editor.putString("nameOfUser", user.getUserName());
+                editor.putString("theUser", userToString);
                 editor.apply();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListTeamFragment()).commit();
                 break;
-
+            case R.id.nav_ITEM_games:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GamesFragment()).commit();
+                break;
             case R.id.nav_ITEM_createTeam:
 
                 prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
@@ -155,10 +169,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                 break;
-            case R.id.nav_ITEM_users:
+            case R.id.nav_ITEM_players:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UsersFragment()).commit();
                 break;
-
+            case R.id.nav_ITEM_requests:
+                gson = new Gson();
+                String userString = gson.toJson(user);
+                prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
+                editor = prefs.edit();
+                editor.putString("theUser", userString);
+                editor.apply();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestsFragment()).commit();
+                break;
             case R.id.nav_ITEM_chats:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsFragment()).commit();
                 break;
@@ -189,6 +211,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         super.onPause();
         checkStatus("offline");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myRef.removeEventListener(myValueEventListener);
     }
 }
 

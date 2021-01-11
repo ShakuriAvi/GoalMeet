@@ -1,46 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     tools:cardCornerRadius="30dp"
-    tools:cardElevation="20dp"
-    android:layout_margin="8dp">
+    tools:cardElevation="20dp">
 
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_margin="4dp"
-    android:orientation="horizontal">
-
-
-    <ImageView
-    android:id="@+id/gamesTeams_IMG_firstSymbol"
-    android:layout_width="0dp"
-    android:layout_height="200dp"
-        android:layout_weight="3"
-    android:src="@drawable/football_club"/>
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/recycleTeams_LAY_cover"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_margin="4dp"
-        android:layout_weight="6"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            />
+            android:layout_margin="4dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/recycleTeams_TXT_team1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name Club"
+                android:textSize="25sp" />
+
+            <ImageView
+                android:id="@+id/recycleTeams_IMG_symbolteam1"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/football_club" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/recycleTeams_ETXT_score1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/recycleTeams_TXT_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="vs"
+                    android:textSize="50dp" />
+                <ImageView
+                    android:id="@+id/recycleTeams_IMG_saveResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.6"
+                    android:layout_gravity="center"
+                    android:src="@drawable/button"/>
+                <TextView
+                    android:id="@+id/recycleTeams_TXT_editResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:text="EDIT"
+                    android:textColor="@color/blue"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/recycleTeams_ETXT_score2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:visibility="gone"  />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/recycleTeams_TXT_team2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name Club"
+                android:textSize="25sp" />
+
+            <ImageView
+                android:id="@+id/recycleTeams_IMG_symbolteam2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/football_club" />
+        </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/gamesTeams_IMG_secondSymbol"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:src="@drawable/football_club"/>
-
-
-</LinearLayout>
 </com.google.android.material.card.MaterialCardView>

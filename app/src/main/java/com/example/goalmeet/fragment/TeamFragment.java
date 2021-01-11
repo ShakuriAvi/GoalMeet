@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.goalmeet.Activity.MessageActivity;
 import com.example.goalmeet.Adapter.Adapter_SymbolTeam;
-import com.example.goalmeet.Class.RequestJoin;
+import com.example.goalmeet.Class.Request;
 import com.example.goalmeet.Class.Team;
 import com.example.goalmeet.Class.User;
 import com.example.goalmeet.R;
@@ -47,12 +47,11 @@ public class TeamFragment extends Fragment {
     private Gson gson;
     private Team team;
     private User user;
-    private RequestJoin newRequestJoin;
+    private Request request;
     private Dialog dialogNewRequsetJoin, dialogNewMatchGame;
 
     private RecyclerView.LayoutManager layoutManager;
-    private String nameUser, nameClubCurrentUser;
-    boolean isManager;
+    private ValueEventListener teamListener,requestListener;
     private RecyclerView fragmentSymbol_LST_teams;
     private ArrayList<String> nameSymbols;
     private FirebaseUser firebaseUser;
@@ -83,18 +82,17 @@ public class TeamFragment extends Fragment {
     private void getTeamFromJson(View view) {
         gson = new Gson();
         prefs = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
-        isManager = prefs.getBoolean("userIsManager", false);
-        nameUser = prefs.getString("nameOfUser", null);
+        String userToString = prefs.getString("theUser", null);
+        user = gson.fromJson(userToString, User.class);
         String pressOnTeam = prefs.getString("pressOnTeam", null);
         if (pressOnTeam != null) {//if user arrive to fragment from listTeamFragment or createTeamFragment
             team = gson.fromJson(pressOnTeam, Team.class);
             initUi(view);
         } else {//if user arrive to fragment from Main Activity (from nav)
 
-            String userToString = prefs.getString("theUserFromMainActivity", null);
-            user = gson.fromJson(userToString, User.class);
+
             reference = FirebaseDatabase.getInstance().getReference("teams").child(user.getNameClub());
-            reference.addValueEventListener(new ValueEventListener() {
+            teamListener= reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     team = dataSnapshot.getValue(Team.class);
@@ -185,7 +183,7 @@ public class TeamFragment extends Fragment {
 
             if (!user.getNameClub().equals(team.getName()) && !user.getIsManager()) {//if the user is guest but don't manager of other teams
                 team_BTN_requestJoin.setVisibility(View.VISIBLE);
-            } else if(user.getIsManager()){//if user is'nt manager of this team but he manager of other team
+            } else if (user.getIsManager()) {//if user is'nt manager of this team but he manager of other team
                 team_BTN_inviteGame.setVisibility(View.VISIBLE);
             }
 
@@ -202,38 +200,38 @@ public class TeamFragment extends Fragment {
             team_IMG_message.setVisibility(View.VISIBLE);
             clickOnButtonGuest();
 
-    }else{//if the user is the manager of team
-        dialogNewRequsetJoin = new Dialog(getActivity());
-        dialogNewRequsetJoin.setContentView(R.layout.popup_user_request_join);
-        popuprequset_BTN_remove = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_remove);
-        popuprequset_BTN_showProfil = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_showProfil);
-        popuprequset_BTN_confirm = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_confirm);
-        popuprequset_TXT_teams = dialogNewRequsetJoin.findViewById(R.id.popuprequset_TXT_teams);
-        clickOnEditManager(); // if the user is manager
-        reference = FirebaseDatabase.getInstance().getReference("requestJoin");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    newRequestJoin = snapshot.getValue(RequestJoin.class);
+        } else {//if the user is the manager of team
+            dialogNewRequsetJoin = new Dialog(getActivity());
+            dialogNewRequsetJoin.setContentView(R.layout.popup_user_request_join);
+            popuprequset_BTN_remove = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_remove);
+            popuprequset_BTN_showProfil = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_showProfil);
+            popuprequset_BTN_confirm = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_confirm);
+            popuprequset_TXT_teams = dialogNewRequsetJoin.findViewById(R.id.popuprequset_TXT_teams);
+            clickOnEditManager(); // if the user is manager
+            reference = FirebaseDatabase.getInstance().getReference("request");
+            requestListener=reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        request = snapshot.getValue(Request.class);
 
-                    if (newRequestJoin.getReceiver().equals(snapshot.getKey()) && newRequestJoin.getSeen() == false) {
-                        dialogNewRequsetJoin.getWindow();
-                        dialogNewRequsetJoin.show();
-                        popuprequset_TXT_teams.setText(" You have a new request to join from " + newRequestJoin.getNameSender() + ". Do you approve? ");
-                        break;
+                        if (request.getReceiver().equals(firebaseUser.getUid()) && request.getSeen() == false && request.getFromTeam().equals("")) {
+                            dialogNewRequsetJoin.getWindow();
+                            dialogNewRequsetJoin.show();
+                            popuprequset_TXT_teams.setText(" You have a new request to join from " + request.getNameSender() + ". Do you approve? ");
+                            break;
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
-
-}
 
     private void clickOnButtonGuest() {
         team_IMG_message.setOnClickListener(new View.OnClickListener() {
@@ -249,7 +247,7 @@ public class TeamFragment extends Fragment {
         team_BTN_requestJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequestToJoin(firebaseUser.getUid(), team.getTheManager(), nameUser);
+                sendRequest();
                 team_BTN_requestJoin.setEnabled(false);
                 Toast.makeText(getActivity(), "request to join send", Toast.LENGTH_SHORT).show();
             }
@@ -257,8 +255,8 @@ public class TeamFragment extends Fragment {
         team_BTN_inviteGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendRequest();
                 team_BTN_inviteGame.setEnabled(false);
-                sendInviteGame();
                 Toast.makeText(getActivity(), "request for match game send", Toast.LENGTH_SHORT).show();
             }
 
@@ -266,29 +264,19 @@ public class TeamFragment extends Fragment {
 
 
     }
-    private void sendInviteGame(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("inviteGame");
+
+    private void sendRequest() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("request");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", user.getId());
-        hashMap.put("receiver",team.getTheManager());
-        hashMap.put("fromTeam",user.getNameClub());
-        hashMap.put("toTeam",team.getName());
+        hashMap.put("nameSender", user.getUserName());
+        hashMap.put("receiver", team.getTheManager());
+        hashMap.put("fromTeam", user.getNameClub());
+        hashMap.put("toTeam", team.getName());
         hashMap.put("seen", false);
         hashMap.put("confirmApplication", false);
-        RequestMatch requestMatch = new RequestMatch(user.getId(),team.getTheManager(),user.getNameClub(),team.getName(),false,false);
-        reference.child(team.getTheManager()).setValue(requestMatch);
-    }
-    private void sendRequestToJoin(String sender, String receiver, String nameSender) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("requestJoin");
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", sender);
-        hashMap.put("receiver", receiver);
-        hashMap.put("team", team.getName());
-        hashMap.put("seen", false);
-        hashMap.put("confirmApplication", false);
-        hashMap.put("nameSender", nameSender);
-        RequestJoin requestJoin = new RequestJoin(sender, receiver, false, false, nameSender, team.getName());
-        reference.child(receiver).setValue(requestJoin);
+        Request request = new Request(user.getId(), team.getTheManager(), user.getNameClub(), team.getName(), false, false, user.getUserName());
+        reference.child(team.getTheManager() + user.getId()).setValue(request);
     }
 
 
@@ -383,11 +371,11 @@ public class TeamFragment extends Fragment {
             public void onClick(View v) {
                 updateFromManagerAnswer(true, true);
 
-                team.setCadre(team.getCadre() + ", " + newRequestJoin.getNameSender());
+                team.setCadre(team.getCadre() + ", " + request.getNameSender());
                 changeAttributeInFireBase("cadre", team.getCadre());
                 team_TXT_playerTeam.setText("player name : " + team.getCadre());
                 dialogNewRequsetJoin.dismiss();
-                reference = FirebaseDatabase.getInstance().getReference("users").child(newRequestJoin.getSender());
+                reference = FirebaseDatabase.getInstance().getReference("users").child(request.getSender());
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("nameClub", team.getName());
                 reference.updateChildren(map);
@@ -406,7 +394,7 @@ public class TeamFragment extends Fragment {
 
                 SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("userId", newRequestJoin.getSender());
+                editor.putString("userId", request.getSender());
                 editor.apply();
                 dialogNewRequsetJoin.dismiss();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.teamFragment, new ProfilFragment()).commit();
@@ -422,7 +410,7 @@ public class TeamFragment extends Fragment {
     }
 
     private void updateFromManagerAnswer(boolean seen, boolean confirmApplication) {
-        reference = FirebaseDatabase.getInstance().getReference("requestJoin").child(team.getTheManager());
+        reference = FirebaseDatabase.getInstance().getReference("request").child(team.getTheManager());
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("seen", seen);
         hashMap.put("confirmApplication", confirmApplication);
@@ -435,5 +423,14 @@ public class TeamFragment extends Fragment {
             String name = "symbol_" + (i);
             nameSymbols.add(i - 1, name);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(requestListener!=null)
+            reference.removeEventListener(requestListener);
+        if(teamListener!=null)
+            reference.removeEventListener(teamListener);
     }
 }

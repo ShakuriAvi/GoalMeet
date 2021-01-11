@@ -48,7 +48,7 @@
                         android:layout_gravity="start"
                         android:id="@+id/team_BTN_inviteGame"
                         android:visibility="gone"
-                        android:text="inviteGame"/>
+                        android:text="invite Game"/>
                     <ImageView
                         android:id="@+id/team_IMG_message"
                         android:layout_width="0dp"

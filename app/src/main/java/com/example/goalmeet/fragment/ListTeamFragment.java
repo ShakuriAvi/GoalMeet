@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goalmeet.Adapter.Adapter_Teams;
 import com.example.goalmeet.Class.Team;
+import com.example.goalmeet.Class.User;
 import com.example.goalmeet.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -71,14 +72,15 @@ public class ListTeamFragment extends Fragment {
         adapter.setClickListener(new Adapter_Teams.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Gson gson = new Gson();
+
                 SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE,getActivity().MODE_PRIVATE);
-                String userName = prefs.getString("nameOfUser", null);
+              //  String userName = prefs.getString("nameOfUser", null);
                 SharedPreferences.Editor editor = prefs.edit();
+                Gson gson = new Gson();
                 String teamToString = gson.toJson(teamsAvailable.get(position));
-                editor.putString("nameOfUser", userName);
-                Log.d("qqq"," " + userName);
                 editor.putString("pressOnTeam" , teamToString);
+                String userToString = prefs.getString("theUser", null);
+                editor.putString("theUser", userToString);
                 editor.apply();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.listTeamFragment, new TeamFragment()).commit();
             }

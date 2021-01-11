@@ -49,7 +49,7 @@ public class MessageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private  String userId;
 
-    private ValueEventListener seenListener;
+    private ValueEventListener seenListener,readListener,chatListListener;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -134,7 +134,7 @@ public class MessageActivity extends AppCompatActivity {
         //Adding User to chat fragment :Latest Chats with contacts
 
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("chatList").child(firebaseUser.getUid());
-        chatRef.addValueEventListener(new ValueEventListener() {
+       chatListListener= chatRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
@@ -156,7 +156,7 @@ public class MessageActivity extends AppCompatActivity {
     private void readMessage(String myId, String userId, String imageURL){
         mChat = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("chats");
-        reference.addValueEventListener(new ValueEventListener() {
+      readListener=  reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -243,6 +243,17 @@ public class MessageActivity extends AppCompatActivity {
         super.onPause();
         reference.removeEventListener(seenListener);
         checkStatus("offline");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(chatListListener!=null)
+            reference.removeEventListener(chatListListener);
+        if(seenListener!=null)
+            reference.removeEventListener(seenListener);
+        if(readListener!=null)
+            reference.removeEventListener(readListener);
     }
 }
 
