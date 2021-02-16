@@ -53,12 +53,6 @@ public class Adapter_Message extends RecyclerView.Adapter<Adapter_Message.ViewHo
     public void onBindViewHolder(@NonNull Adapter_Message.ViewHolder holder, int position) {
         Chat chat = mChat.get(position);
         holder.show_message.setText(chat.getMessage());
-        if(!imgURL.equals("default")){
-            Glide.with(context).load(imgURL).into(holder.profil_image);
-        }else {
-            holder.profil_image.setImageResource(R.drawable.binoculars);
-        }
-
         if(position == mChat.size()-1){
             if(chat.getSeen()){
                 holder.chatItem_TXT_seen.setText("Seen");
@@ -81,13 +75,11 @@ public class Adapter_Message extends RecyclerView.Adapter<Adapter_Message.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView show_message;
-        public ImageView profil_image;
         public TextView chatItem_TXT_seen;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             show_message = itemView.findViewById(R.id.chatItem_TXT_showMessage);
-            profil_image = itemView.findViewById(R.id.chatItem_IMG_profileImage);
             chatItem_TXT_seen = itemView.findViewById(R.id.chatItem_TXT_seen);
         }
     }

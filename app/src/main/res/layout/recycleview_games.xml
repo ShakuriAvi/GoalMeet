@@ -20,22 +20,20 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:layout_weight="3"
+            android:gravity="center"
+            android:background="@color/blue_gray"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recycleTeams_TXT_team1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="Name Club"
+                android:textColor="@color/gold"
                 android:textSize="25sp" />
 
-            <ImageView
-                android:id="@+id/recycleTeams_IMG_symbolteam1"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_weight="2"
-                android:src="@drawable/football_club" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -59,22 +57,30 @@
                 android:layout_margin="4dp"
                 android:layout_weight="2"
                 android:orientation="vertical">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.7"
+                    android:src="@drawable/support__1_"/>
 
                 <TextView
                     android:id="@+id/recycleTeams_TXT_result"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:gravity="center"
                     android:text="vs"
-                    android:textSize="50dp" />
+                    android:textSize="50sp" />
+
                 <ImageView
                     android:id="@+id/recycleTeams_IMG_saveResult"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="0.6"
                     android:layout_gravity="center"
+                    android:visibility="gone"
                     android:src="@drawable/button"/>
                 <TextView
                     android:id="@+id/recycleTeams_TXT_editResult"
@@ -84,6 +90,7 @@
                     android:text="EDIT"
                     android:textColor="@color/blue"
                     android:layout_gravity="center"
+
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -103,22 +110,21 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:layout_weight="3"
+            android:gravity="center"
+            android:background="@color/green"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recycleTeams_TXT_team2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="Name Club"
+                android:textColor="@color/gold"
+
                 android:textSize="25sp" />
 
-            <ImageView
-                android:id="@+id/recycleTeams_IMG_symbolteam2"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:layout_weight="2"
-                android:src="@drawable/football_club" />
+
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

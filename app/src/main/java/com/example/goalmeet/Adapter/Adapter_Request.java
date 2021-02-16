@@ -63,7 +63,7 @@ public class Adapter_Request extends RecyclerView.Adapter<Adapter_Request.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Request request = requests.get(position);
-        if(request.getFromTeam().equals("")) {
+        if(request.getFromTeam().equals("")) {//it's request from player that want to join the club
             holder.recycleViewRequest_IMG_picture.setImageResource(R.drawable.add_user);
             holder.recycleViewRequest_TXT_data.setText(" You have a new request to join from " + (request).getNameSender() + ". Do you approve? ");
             holder.recycleViewRequest_BTN_show.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +73,7 @@ public class Adapter_Request extends RecyclerView.Adapter<Adapter_Request.MyView
                 }
             });
 
-        }else{
+        }else{//it's request from club that want to meet for play
             reference=  FirebaseDatabase.getInstance().getReference("teams").child(request.getFromTeam());
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -89,10 +89,10 @@ public class Adapter_Request extends RecyclerView.Adapter<Adapter_Request.MyView
 
                 }
             });
-            holder.recycleViewRequest_BTN_show.setOnClickListener(new View.OnClickListener() {
+            holder.recycleViewRequest_BTN_show.setOnClickListener(new View.OnClickListener() {//if the user clickOn show team
                 @Override
                 public void onClick(View v) {
-                    moveToTeamFragment(position);
+                    moveToTeamFragment();
                 }
             });
 
@@ -105,6 +105,28 @@ public class Adapter_Request extends RecyclerView.Adapter<Adapter_Request.MyView
 
     }
 
+
+    private void clickOnButton(Request request,Button button,boolean seen, boolean confirmApplication,int position,LinearLayout layCover ){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateFromManagerAnswer(seen,confirmApplication,position);
+                layCover.setVisibility(View.GONE);
+                if(confirmApplication == true&&request.getFromTeam().equals(""))
+                    addUserToTeam(position);
+                else if(confirmApplication == true&&!request.getFromTeam().equals("")){
+                    addNewGameToListOfGames(request);
+                }
+            }
+        });
+
+    }
+    private void addUserToTeam(int position) {
+        reference = FirebaseDatabase.getInstance().getReference("users").child(requests.get(position).getSender());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("nameClub", team.getName());
+        reference.updateChildren(map);
+    }
     private void addNewGameToListOfGames(Request request) {
 
         reference = FirebaseDatabase.getInstance().getReference("games");
@@ -119,7 +141,7 @@ public class Adapter_Request extends RecyclerView.Adapter<Adapter_Request.MyView
         reference.child( request.getFromTeam()+"vs"+request.getToTeam()).setValue(game);
     }
 
-    private void moveToTeamFragment(int position) {
+    private void moveToTeamFragment() {
         SharedPreferences prefs = mInflater.getContext().getSharedPreferences(SP_FILE, mInflater.getContext().MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
@@ -137,28 +159,7 @@ public class Adapter_Request extends RecyclerView.Adapter<Adapter_Request.MyView
         editor.apply();
         fragmentManager.beginTransaction().replace(R.id.requestFragment, new ProfilFragment()).commit();
     }
-    private void clickOnButton(Request request,Button button,boolean seen, boolean confirmApplication,int position,LinearLayout layCover ){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateFromManagerAnswer(seen,confirmApplication,position);
-                layCover.setVisibility(View.GONE);
-                if(confirmApplication == true&&request.getFromTeam().equals(""))
-                    addUserToTeam(position);
-                else if(confirmApplication == true&&!request.getFromTeam().equals("")){
-                    addNewGameToListOfGames(request);
-                }
-            }
-        });
 
-    }
-
-    private void addUserToTeam(int position) {
-        reference = FirebaseDatabase.getInstance().getReference("users").child(requests.get(position).getSender());
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("nameClub", team.getName());
-        reference.updateChildren(map);
-    }
 
     private void updateFromManagerAnswer( boolean seen, boolean confirmApplication,int position) {
         String key = requests.get(position).getReceiver()+requests.get(position).getSender();

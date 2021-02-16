@@ -1,5 +1,6 @@
 package com.example.goalmeet.fragment;
 
+
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,9 +42,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
@@ -56,6 +53,8 @@ public class ProfilFragment extends Fragment {
     private ImageView userProfil_IMG_symbol, userProfil_IMG_saveDescription, userProfil_IMG_saveCity, userProfil_IMG_saveName, userProfil_IMG_message;
     private String userId;
     private Request request;
+    private   SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private User user;
     private TextInputLayout userProfil_ETXT_description, userProfil_ETXT_name, userProfil_ETXT_city, userProfil_ETXT_myTeam;
     private FirebaseUser firebaseUser;
@@ -72,6 +71,7 @@ public class ProfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profil, container, false);
+
         initView();
         getDataFromSharedPreferences();
         permissionUser();
@@ -97,15 +97,14 @@ public class ProfilFragment extends Fragment {
     }
 
     private void getDataFromSharedPreferences() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
+       prefs = getContext().getSharedPreferences(SP_FILE, getContext().MODE_PRIVATE);
         userId = prefs.getString("userId", null);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.commit();
+        editor = prefs.edit();
+        Log.d("tttt","3 "+ userId);
     }
 
     private void permissionUser() {
-        if (userId == null) {//for user in her profile
+        if (userId==null) {//for user in her profile
             reference = FirebaseDatabase.getInstance().getReference("request"); //check if there is confirm from manager's clubs
             listenerAnswerRequest = reference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -134,8 +133,11 @@ public class ProfilFragment extends Fragment {
                 }
             });
             UserInHisProfil();
-        } else
+        } else {
             userInElseProfil();
+                if(userId!=null)
+                    editor.remove("userId").apply();
+        }
     }
 
     private void getMessageDialog(DataSnapshot snapshot, Boolean confirmApplication, String confirm, String refused) {
@@ -146,7 +148,6 @@ public class ProfilFragment extends Fragment {
             popup_TXT_answer.setText(confirm);
             mDialog.getWindow();
             mDialog.show();
-            //     user.setNameClub("");
         } else {
             popup_TXT_answer.setText(refused);
             mDialog.getWindow();
@@ -158,10 +159,6 @@ public class ProfilFragment extends Fragment {
 
     private void UserInHisProfil() {
         //profil Image reference in storage
-        SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE,getActivity().MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.apply();
-        userId = prefs.getString("userId", null);
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userId = firebaseUser.getUid();
@@ -186,16 +183,15 @@ public class ProfilFragment extends Fragment {
     }
 
     private void userInElseProfil() {
-
         reference = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         Log.d("pppp", " " + reference);
         lisitenerGuest = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                Log.d("tttt","2222");
                 readDataOfUserFromFireBase(dataSnapshot);
-                clickOnOtherProfile();
+
             }
 
             @Override
@@ -204,7 +200,7 @@ public class ProfilFragment extends Fragment {
             }
 
         });
-
+        clickOnOtherProfile();
     }
 
     private void readDataOfUserFromFireBase(DataSnapshot dataSnapshot) {
@@ -214,7 +210,7 @@ public class ProfilFragment extends Fragment {
         }
         userProfil_ETXT_name.setHint(user.getUserName());
         userProfil_ETXT_city.setHint(user.getCity());
-        userProfil_ETXT_description.setHint("Name Team: " + user.getDescription());
+        userProfil_ETXT_description.setHint("About Me: " + user.getDescription());
         if (user.getNameClub().equals(""))
             userProfil_ETXT_myTeam.setHint("Name Team: None");
         else
@@ -222,71 +218,7 @@ public class ProfilFragment extends Fragment {
     }
 
 
-    private void selectImage() {
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        i.setType("image/*");
 
-        i.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(i, IMAGE_REQUEST);
-
-
-    }
-
-    private String getFileExtention(Uri uri) {
-
-        ContentResolver contentResolver = getContext().getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-
-    }
-
-
-    private void uploadMyImage() {
-
-        if (imageUri != null) {
-            final StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(imageUri));
-
-            uploasTask = fileReference.putFile(imageUri);
-
-            uploasTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-
-
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-
-                    }
-                    return fileReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()) {
-                        Uri downlandUri = (Uri) task.getResult();
-                        String mUri = downlandUri.toString();
-                        reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("imageURL", mUri);
-                        reference.updateChildren(map);
-
-                    } else {
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            Toast.makeText(getContext(), "No Image Selected", Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
 
     public void clickOnEditHisProfile() {//for user in his profile
         userProfil_TXT_editSymbol.setOnClickListener(new View.OnClickListener() {
@@ -352,6 +284,7 @@ public class ProfilFragment extends Fragment {
 
     private void clickOnOtherProfile() {
         userProfil_IMG_message.setVisibility(View.VISIBLE);
+
         userProfil_IMG_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -361,30 +294,89 @@ public class ProfilFragment extends Fragment {
                 getActivity().startActivity(i);
             }
         });
+        userProfil_TXT_editDescription.setVisibility(View.GONE);
+        userProfil_TXT_editSymbol.setVisibility(View.GONE);
+        userProfil_TXT_editName.setVisibility(View.GONE);
+        userProfil_TXT_editCity.setVisibility(View.GONE);
+    }
+    private void selectImage() {
+
+
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        getActivity().startActivityForResult(chooserIntent, IMAGE_REQUEST);
+
     }
 
+    private String getFileExtention(Uri uri) {
+        Log.d("qqqq","999999");
+        ContentResolver contentResolver = getContext().getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+
+    }
+
+
+    private void uploadMyImage() {
+        Log.d("qqqq","88888");
+        if (imageUri != null) {
+            final StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(imageUri));
+
+            uploasTask = fileReference.putFile(imageUri);
+
+            uploasTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+
+
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+
+                    }
+                    return fileReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (task.isSuccessful()) {
+                        Uri downlandUri = (Uri) task.getResult();
+                        String mUri = downlandUri.toString();
+                        Log.d("qqqq",mUri);
+                        reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("imageURL", mUri);
+                        reference.updateChildren(map);
+
+                    } else {
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Image Selected", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
     private void changeAttributeInFireBase(String key, String value) {
+        Log.d("qqqq","777777");
         reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
         HashMap<String, Object> map = new HashMap<>();
         map.put(key, value);
         reference.updateChildren(map);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            imageUri = data.getData();
-
-            if (uploasTask != null && uploasTask.isInProgress()) {
-
-                Toast.makeText(getContext(), "Upload in progress..", Toast.LENGTH_SHORT).show();
-            } else {
-                uploadMyImage();
-            }
-        }
     }
 
 
@@ -396,5 +388,22 @@ public class ProfilFragment extends Fragment {
             reference.removeEventListener(lisitenerGuest);
         if (listenerUserHisProfile != null)
             reference.removeEventListener(listenerUserHisProfile);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("qqqq","RESULT_OK "+RESULT_OK );
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            imageUri = data.getData();
+            Log.d("qqqq",imageUri.getPath());
+            if (uploasTask != null && uploasTask.isInProgress()) {
+
+                Toast.makeText(getContext(), "Upload in progress..", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d("qqqq","22222");
+                uploadMyImage();
+            }
+        }
     }
 }

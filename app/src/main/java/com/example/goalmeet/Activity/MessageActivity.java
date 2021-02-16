@@ -48,7 +48,6 @@ public class MessageActivity extends AppCompatActivity {
     private List<Chat> mChat;
     private RecyclerView recyclerView;
     private  String userId;
-
     private ValueEventListener seenListener,readListener,chatListListener;
 
     @Override
@@ -58,7 +57,7 @@ public class MessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message);
         initView();
         manageMessage();
-        clickOnImage();
+       // clickOnImage();
         Log.d("aaaa","4444");
     }
 
@@ -116,12 +115,11 @@ public class MessageActivity extends AppCompatActivity {
                     message_ETXT_send.setText("");
                 }
 
-
             });
 
            seenMessage(userId);
-        }
 
+        }
     private void sendMessage(String sender, String receiver, String message) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap = new HashMap<>();
@@ -147,11 +145,7 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
-
-
 
     private void readMessage(String myId, String userId, String imageURL){
         mChat = new ArrayList<>();
@@ -215,20 +209,22 @@ public class MessageActivity extends AppCompatActivity {
         reference.updateChildren(hashMap);
     }
 
-    private void clickOnImage() {
-        message_IMG_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MessageActivity.this, MainActivity.class);
-                SharedPreferences prefs = getSharedPreferences(SP_FILE,MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("userId" , userId);
-                editor.apply();
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-            }
-        });
-    }
+//    private void clickOnImage() {
+//        message_IMG_profile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(MessageActivity.this, MainActivity.class);
+//                SharedPreferences prefs = getSharedPreferences(SP_FILE,MODE_PRIVATE);
+//                SharedPreferences.Editor editor = prefs.edit();
+//                Log.d("tttt","1 "+ userId);
+//                editor.putString("userId" , userId);
+//                editor.apply();
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(i);
+//                finish();
+//            }
+//        });
+//    }
 
 
     @Override

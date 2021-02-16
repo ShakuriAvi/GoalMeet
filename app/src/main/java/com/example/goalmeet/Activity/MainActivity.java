@@ -1,19 +1,25 @@
 package com.example.goalmeet.Activity;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.goalmeet.Class.User;
@@ -26,6 +32,10 @@ import com.example.goalmeet.fragment.ProfilFragment;
 import com.example.goalmeet.fragment.RequestsFragment;
 import com.example.goalmeet.fragment.TeamFragment;
 import com.example.goalmeet.fragment.UsersFragment;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +44,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -44,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Firebase
     private FirebaseUser firebaseUser;
     private Toolbar activity_toolbar;
-    private DatabaseReference myRef;
+    private DatabaseReference myRef,reference;
     private Gson gson = new Gson();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -77,10 +90,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String teamToString = user.getNameClub();
                     prefs = getSharedPreferences(SP_FILE, MODE_PRIVATE);
                     editor = prefs.edit();
+
+
+                    userId = prefs.getString("userId", null);
+                    Log.d("tttt","2 "+ userId);
+                   // editor.putString("userId" , userId);
                     editor.putString("theTeamFromMainActivity", teamToString);
                     editor.putString("nameOfUser", user.getUserName());
                     editor.apply();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfilFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfilFragment(),"FRAGMENT_TAG").commit();
                     navigationView.setCheckedItem(R.id.nav_ITEM_myProfil);
 
                 }
@@ -109,19 +127,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_ITEM_myProfil:
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfilFragment()).commit();
                 break;
             case R.id.nav_ITEM_myTeam:
@@ -213,10 +225,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkStatus("offline");
     }
 
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         myRef.removeEventListener(myValueEventListener);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d("qqqq","12345");
+        Fragment profilFragment = getSupportFragmentManager().findFragmentByTag("FRAGMENT_TAG");
+        if(profilFragment!=null)
+            profilFragment.onActivityResult(requestCode,resultCode,data);
+        Log.d("qqqq","request code" + requestCode +" result code" + resultCode+" data"  + data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
 

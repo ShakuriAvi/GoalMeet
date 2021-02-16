@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
-    xmlns:tools="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profileFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:ignore="NamespaceTypo">
+    android:clickable="true"
+    android:background="?android:attr/colorBackground"
+    android:tag="FRAGMENT_TAG">
 
     <LinearLayout
         android:id="@+id/userProfil_LAY_cover"
@@ -14,8 +17,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_height="200dp"
             android:background="@drawable/social_media_new_resu"
             android:orientation="vertical">
 
@@ -32,8 +34,8 @@
                 android:id="@+id/userProfil_IMG_symbol"
                 android:layout_width="96dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="35dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="35dp"
                 android:layout_weight="1.5"
                 android:src="@drawable/user"
                 tools:civ_border_color="#FF000000"
@@ -55,242 +57,260 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/black"
+
             android:orientation="horizontal"></LinearLayout>
 
 
+        <ScrollView
+
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="59dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.75"
-                android:src="@drawable/man_user" />
+            android:orientation="vertical">
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/userProfil_ETXT_name"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="name player"
-                android:textColorHint="@color/black"
-                app:boxBackgroundColor="@color/cream"
-                android:enabled="false"
-                android:layout_weight="2"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:ems="15"
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.75"
+                    android:src="@drawable/man_user" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userProfil_ETXT_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:enabled="false"
+                    android:hint="name player"
+                    android:textColorHint="@color/black"
+                    app:boxBackgroundColor="@color/cream"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
 
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <ImageView
-                android:id="@+id/userProfil_IMG_saveName"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:src="@drawable/button"/>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ems="15"
+                        android:enabled="false"
 
-            <TextView
-                android:id="@+id/userProfil_TXT_editName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Edit"
-                android:textColor="@color/blue" />
+                        android:inputType="textPersonName" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/userProfil_IMG_saveName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/button"
+                    android:visibility="gone" />
 
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-
-
-            android:background="@color/black"
-            android:orientation="horizontal"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="59dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:src="@drawable/city_map" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/userProfil_ETXT_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:enabled="false"
-                android:hint="City:"
-                android:textColorHint="@color/black"
-                app:boxBackgroundColor="@color/cream"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
+                <TextView
+                    android:id="@+id/userProfil_TXT_editName"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:ems="10"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:textColor="@color/blue" />
 
-                    android:inputType="textPersonName" />
+            </LinearLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-            <ImageView
-                android:id="@+id/userProfil_IMG_saveCity"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:src="@drawable/button"/>
-            <TextView
-                android:id="@+id/userProfil_TXT_editCity"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Edit"
-                android:textColor="@color/blue" />
+            <LinearLayout
 
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
 
-        <LinearLayout
+                android:layout_marginTop="40dp"
+                android:background="@color/black"
+                android:orientation="horizontal"></LinearLayout>
 
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-
-            android:background="@color/black"
-            android:orientation="horizontal"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="59dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:src="@drawable/football_club" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/userProfil_ETXT_myTeam"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name Club:"
-                android:layout_gravity="center"
-                android:enabled="false"
-                android:layout_weight="2.5"
-                android:textColorHint="@color/black"
-                app:boxBackgroundColor="@color/cream"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
+                android:layout_marginTop="40dp"
 
-                <com.google.android.material.textfield.TextInputEditText
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/city_map" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userProfil_ETXT_city"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:enabled="false"
+                    android:hint="City:"
+                    android:textColorHint="@color/black"
+                    app:boxBackgroundColor="@color/cream"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+
+                        android:inputType="textPersonName" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/userProfil_IMG_saveCity"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
+                    android:layout_weight="1"
+                    android:src="@drawable/button"
+                    android:visibility="gone" />
 
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/userProfil_TXT_editCity"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:textColor="@color/blue" />
 
-        <LinearLayout
+            </LinearLayout>
 
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
+            <LinearLayout
 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="40dp"
+                android:background="@color/black"
+                android:orientation="horizontal"></LinearLayout>
 
-            android:background="@color/black"
-            android:orientation="horizontal"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/shape"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="58dp"
-                android:layout_weight="0.5"
-
-                android:src="@drawable/description" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/userProfil_ETXT_description"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="About Me:"
-                android:textColorHint="@color/black"
-                app:boxBackgroundColor="@color/cream"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/football_club" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userProfil_ETXT_myTeam"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2.5"
+                    android:enabled="false"
+                    android:hint="Name Club:"
+                    android:textColorHint="@color/black"
+                    app:boxBackgroundColor="@color/cream"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+
+                        android:inputType="textPersonName" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="40dp"
+
+                android:background="@color/black"
+                android:orientation="horizontal"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="58dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginTop="65dp"
+                    android:src="@drawable/description" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userProfil_ETXT_description"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="About Me:"
+                    android:textColorHint="@color/black"
+                    app:boxBackgroundColor="@color/cream"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:ems="10"
+
+                        android:inputType="textPersonName" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/userProfil_IMG_saveDescription"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
+                    android:layout_weight="1"
+                    android:src="@drawable/button"
+                    android:visibility="gone" />
 
-                    android:inputType="textPersonName" />
+                <TextView
+                    android:id="@+id/userProfil_TXT_editDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-            <ImageView
-                android:id="@+id/userProfil_IMG_saveDescription"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:src="@drawable/button"/>
+            <LinearLayout
 
-            <TextView
-                android:id="@+id/userProfil_TXT_editDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Edit"
-                android:textColor="@color/blue" />
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="40dp"
+
+                android:background="@color/black"
+                android:orientation="horizontal"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/blue_gray"
+                android:orientation="horizontal" />
         </LinearLayout>
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-
-
-            android:background="@color/black"
-            android:orientation="horizontal"></LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/blue_gray"
-        android:layout_weight="0.5"
-
-        android:orientation="horizontal"/>
+        </ScrollView>
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>

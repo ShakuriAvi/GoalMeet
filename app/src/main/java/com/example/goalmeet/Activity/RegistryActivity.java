@@ -76,18 +76,7 @@ public class RegistryActivity extends AppCompatActivity {
                     String key = myRef.push().getKey();
                     myRef.child(userId).setValue(user);
 
-                  //  myRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-                    //HashMaps
-//                    HashMap<String,String> hashMap = new HashMap<>();
-//                    hashMap.put("id",userId);
-//                    hashMap.put("username",userName);
-//                    hashMap.put("imageURL","defult");
 
-                    // opening the main activity after success Registration
-//                    myRef.addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                             if(task.isSuccessful()) {
                                  Intent i  = new Intent(RegistryActivity.this,MainActivity.class);
                                  i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                  startActivity(i);
@@ -97,8 +86,7 @@ public class RegistryActivity extends AppCompatActivity {
  //                   });
 
                 }else {
-                  //  Log.d("FirebaseAuth", "onComplete" + task.getException().getMessage());
-                  //  Log.d("aaaa", " 44444" );
+
                     Toast.makeText(RegistryActivity.this,"Invalid Email or Password",Toast.LENGTH_SHORT).show();
                 }
             }

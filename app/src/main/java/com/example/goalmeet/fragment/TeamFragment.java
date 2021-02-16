@@ -201,34 +201,13 @@ public class TeamFragment extends Fragment {
             clickOnButtonGuest();
 
         } else {//if the user is the manager of team
-            dialogNewRequsetJoin = new Dialog(getActivity());
-            dialogNewRequsetJoin.setContentView(R.layout.popup_user_request_join);
-            popuprequset_BTN_remove = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_remove);
-            popuprequset_BTN_showProfil = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_showProfil);
-            popuprequset_BTN_confirm = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_confirm);
-            popuprequset_TXT_teams = dialogNewRequsetJoin.findViewById(R.id.popuprequset_TXT_teams);
+           // dialogNewRequsetJoin = new Dialog(getActivity());
+            //dialogNewRequsetJoin.setContentView(R.layout.popup_user_request_join);
+//            popuprequset_BTN_remove = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_remove);
+//            popuprequset_BTN_showProfil = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_showProfil);
+//            popuprequset_BTN_confirm = dialogNewRequsetJoin.findViewById(R.id.popuprequset_BTN_confirm);
+//            popuprequset_TXT_teams = dialogNewRequsetJoin.findViewById(R.id.popuprequset_TXT_teams);
             clickOnEditManager(); // if the user is manager
-            reference = FirebaseDatabase.getInstance().getReference("request");
-            requestListener=reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        request = snapshot.getValue(Request.class);
-
-                        if (request.getReceiver().equals(firebaseUser.getUid()) && request.getSeen() == false && request.getFromTeam().equals("")) {
-                            dialogNewRequsetJoin.getWindow();
-                            dialogNewRequsetJoin.show();
-                            popuprequset_TXT_teams.setText(" You have a new request to join from " + request.getNameSender() + ". Do you approve? ");
-                            break;
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
         }
 
     }
@@ -366,40 +345,6 @@ public class TeamFragment extends Fragment {
             }
         });
 
-        popuprequset_BTN_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateFromManagerAnswer(true, true);
-
-                team.setCadre(team.getCadre() + ", " + request.getNameSender());
-                changeAttributeInFireBase("cadre", team.getCadre());
-                team_TXT_playerTeam.setText("player name : " + team.getCadre());
-                dialogNewRequsetJoin.dismiss();
-                reference = FirebaseDatabase.getInstance().getReference("users").child(request.getSender());
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("nameClub", team.getName());
-                reference.updateChildren(map);
-            }
-        });
-        popuprequset_BTN_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateFromManagerAnswer(true, false);
-                dialogNewRequsetJoin.dismiss();
-            }
-        });
-        popuprequset_BTN_showProfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SharedPreferences prefs = getActivity().getSharedPreferences(SP_FILE, getActivity().MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("userId", request.getSender());
-                editor.apply();
-                dialogNewRequsetJoin.dismiss();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.teamFragment, new ProfilFragment()).commit();
-            }
-        });
     }
 
     private void changeAttributeInFireBase(String key, String value) {

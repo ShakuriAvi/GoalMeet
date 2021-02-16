@@ -1,5 +1,6 @@
 package com.example.goalmeet.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -73,7 +74,7 @@ public class Adapter_User extends RecyclerView.Adapter<Adapter_User.ViewHolder> 
                 i.putExtra("userId",user.getId());
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(i);
-
+              //  ((Activity) context).finish();
             }
         });
     }
