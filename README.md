@@ -28,7 +28,7 @@ Login by email and password.
 ![profile](https://user-images.githubusercontent.com/65177459/108538603-a66b6500-72e7-11eb-99f8-fb35696e9d24.jpg)
 # The possible options in the application
 
-![nav1](https://user-images.githubusercontent.com/65177459/108539006-1aa60880-72e8-11eb-96b5-554890dc2159.jpg =100x20)
+![nav1](https://user-images.githubusercontent.com/65177459/108539006-1aa60880-72e8-11eb-96b5-554890dc2159.jpg)
 ![nav2](https://user-images.githubusercontent.com/65177459/108539027-1e398f80-72e8-11eb-83f8-176e7e6803c0.jpg)
 
 # Clicking on the My Team.
