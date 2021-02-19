@@ -52,7 +52,7 @@ The team manager who receives the request decides whether to approve or reject t
 If the team manager approves the request, the game is saved in the system and by clicking on the games, everyone can see the result of the game.
 
 ![games](https://user-images.githubusercontent.com/65177459/108539401-9e5ff500-72e8-11eb-952b-ebf020170d2b.jpg)
-# Main Flow : A player is interested in joining the team.
+** Main Flow : A player is interested in joining the team.**
 The player checks which teams exist in the system by clicking on available team
 
 ![avalibleTeam](https://user-images.githubusercontent.com/65177459/108539573-d8c99200-72e8-11eb-9932-6cc84b7815bb.jpg)
