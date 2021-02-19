@@ -27,6 +27,7 @@ Login by email and password:
 <img src="https://user-images.githubusercontent.com/65177459/108538582-a1a6b100-72e7-11eb-98ce-c2ab55f74157.jpg" width="550">
 
 # User profile
+A user can edit his profile at any given time but when he is on another user's profile he has no permissions to change.
 
 <img src="https://user-images.githubusercontent.com/65177459/108538603-a66b6500-72e7-11eb-99f8-fb35696e9d24.jpg" width="550">
 
@@ -43,16 +44,17 @@ if he does not belong to any team he will be notified.
 
 # Main Flow : Scheduling a meeting between two teams by their managers
 
-The team manager sends a message to the other manager via chat.
+* The team manager sends a message to the other manager via chat.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539262-6d7fc000-72e8-11eb-8b0a-6f41350d85f0.jpg" width="550">
 
-One of the team managers sends the other manager an invitation to schedule a meeting.
+* One of the team managers sends the other manager an invitation to schedule a meeting.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539278-753f6480-72e8-11eb-84a8-83fbf97d1fef.jpg" width="550">
 
-The team manager who receives the request decides whether to approve or reject the request. If he refuses / approves the team manager who sends the request is updated.
-If the team manager approves the request, the game is saved in the system and by clicking on the games, everyone can see the result of the game.
+* The team manager who receives the request decides whether to approve or reject the request.
+  If he refuses / approves the team manager who sends the request is updated.
+  If the team manager approves the request, the game is saved in the system and by clicking on the games, everyone can see the result of the game.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539401-9e5ff500-72e8-11eb-952b-ebf020170d2b.jpg" width="550">
 
@@ -61,28 +63,32 @@ The player checks which teams exist in the system by clicking on available team
 
 <img src="https://user-images.githubusercontent.com/65177459/108539573-d8c99200-72e8-11eb-9932-6cc84b7815bb.jpg" width="550">
 
-The player selects the team he wants to join and then sends her a message or a request to join.
+* The player selects the team he wants to join and then sends her a message or a request to join.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539339-8c7e5200-72e8-11eb-821a-e60695c94abf.jpg" width="550">
 
-The player chats with the team manager, to check if the team is interested in another player and see if the team is suitable for him.
+* The player chats with the team manager, to check if the team is interested in another player and see if the team is suitable for him.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539659-f696f700-72e8-11eb-8ec4-1f27857b85c1.jpg" width="550">
 
-The team manager decides whether to approve the request or not. The player is updated according to the decision of the team manager. If the team manager decided to approve it, the next time the player clicks on the "My Team" option the new team with player privileges will appear.
+* The team manager decides whether to approve the request or not. The player is updated according to the decision of the team manager.
+  If the team manager decided to approve it, the next time the player clicks on the "My Team" option the new team with player privileges will appear.
 
 <img src="https://user-images.githubusercontent.com/65177459/108545701-cce1ce00-72f0-11eb-8e65-b320818c9a35.jpg" width="550">
 
-# Clicking on the CreateTeam.
+# Clicking on the CreateTeam
+
+Allows the user to open a new team and add players to schedule meetings with other teams, select the team name, description and logo. 
+The logo will be chosen with the help of Recycle View.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539874-36f67500-72e9-11eb-9349-ec9973f0de00.jpg" width="550">
 
-# Clicking on the chat.
+# Clicking on the chat
 Displays all the people the user has talked to and their status (online or offline).
 
 <img src="https://user-images.githubusercontent.com/65177459/108538845-e7fc1000-72e7-11eb-8da1-ebd759d89e71.jpg" width="550">
 
-# Clicking on the Players.
+# Clicking on the Players
 Displays all registered users in the application and their details.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539191-56d96900-72e8-11eb-9457-86bd0e418471.jpg" width="550">
