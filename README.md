@@ -20,6 +20,7 @@ Through chat users can determine where and when to meet, request different reque
 Login by email and password.
 
 ![Home](https://user-images.githubusercontent.com/65177459/108538539-9489c200-72e7-11eb-9aa9-6637bc9babc1.jpg)
+<img src="https://user-images.githubusercontent.com/65177459/108538539-9489c200-72e7-11eb-9aa9-6637bc9babc1.jpg" width="48">
 # Application registration page 
 
 ![register](https://user-images.githubusercontent.com/65177459/108538582-a1a6b100-72e7-11eb-98ce-c2ab55f74157.jpg)
