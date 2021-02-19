@@ -10,11 +10,11 @@ Each user has different permissions:
 * The team manager is the only one who can confirm the admission of new players to the team,
 schedule games with other teams and determining the end result after the team meeting.
 * A player who does not have a team he manages can send requests to other teams to make a switch between teams.
-The program is implemented by working with Firebase, real-time updates between users שnd various photo packages designed by me and by various creators on the internet.
+The program is implemented by working with Firebase, real-time updates between users and various photo packages designed by me and by various creators on the internet.
 Each user can select a profile picture and change it.
 
 Users can have conversations with each other through real-time chat.
-Through chat users can determine where and when to meet, request different requests from football team managers and talk with different users.
+Through chat users can determine where and when to meet, checl if the message read or not, request different requests from football team managers and talk with different users.
 
 
 # HomePage
