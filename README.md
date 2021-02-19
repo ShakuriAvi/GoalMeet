@@ -58,7 +58,7 @@ if he does not belong to any team he will be notified.
 
 <img src="https://user-images.githubusercontent.com/65177459/108539401-9e5ff500-72e8-11eb-952b-ebf020170d2b.jpg" width="550">
 
-** Main Flow : A player is interested in joining the team.**
+# Main Flow : A player is interested in joining the team
 The player checks which teams exist in the system by clicking on available team
 
 <img src="https://user-images.githubusercontent.com/65177459/108539573-d8c99200-72e8-11eb-9932-6cc84b7815bb.jpg" width="550">
