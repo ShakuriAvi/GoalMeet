@@ -19,18 +19,18 @@ Through chat users can determine where and when to meet, request different reque
 # HomePage
 Login by email and password.
 
-![Home](https://user-images.githubusercontent.com/65177459/108538539-9489c200-72e7-11eb-9aa9-6637bc9babc1.jpg)
 <img src="https://user-images.githubusercontent.com/65177459/108538539-9489c200-72e7-11eb-9aa9-6637bc9babc1.jpg" width="650">
 # Application registration page 
 
-![register](https://user-images.githubusercontent.com/65177459/108538582-a1a6b100-72e7-11eb-98ce-c2ab55f74157.jpg)
+<img src="https://user-images.githubusercontent.com/65177459/108538582-a1a6b100-72e7-11eb-98ce-c2ab55f74157.jpg" width="650">
 # User profile
 
-![profile](https://user-images.githubusercontent.com/65177459/108538603-a66b6500-72e7-11eb-99f8-fb35696e9d24.jpg)
+
+<img src="https://user-images.githubusercontent.com/65177459/108538603-a66b6500-72e7-11eb-99f8-fb35696e9d24.jpg" width="650">
 # The possible options in the application
 
-![nav1](https://user-images.githubusercontent.com/65177459/108539006-1aa60880-72e8-11eb-96b5-554890dc2159.jpg)
-![20210219_215331](https://user-images.githubusercontent.com/65177459/108554590-f9034c00-72fc-11eb-9868-09d3b85335af.jpg)
+<img src="https://user-images.githubusercontent.com/65177459/108539006-1aa60880-72e8-11eb-96b5-554890dc2159.jpg" width="650">
+<img src="https://user-images.githubusercontent.com/65177459/108554590-f9034c00-72fc-11eb-9868-09d3b85335af.jpg" width="650">
 
 # Clicking on the My Team.
 A user who belongs to a particular football team, is interested in looking at his team. By clicking on My Team.
