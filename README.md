@@ -29,7 +29,7 @@ Login by email and password.
 # The possible options in the application
 
 ![nav1](https://user-images.githubusercontent.com/65177459/108539006-1aa60880-72e8-11eb-96b5-554890dc2159.jpg)
-![nav2](https://user-images.githubusercontent.com/65177459/108539027-1e398f80-72e8-11eb-83f8-176e7e6803c0.jpg)
+![20210219_215331](https://user-images.githubusercontent.com/65177459/108554590-f9034c00-72fc-11eb-9868-09d3b85335af.jpg)
 
 # Clicking on the My Team.
 A user who belongs to a particular football team, is interested in looking at his team. By clicking on My Team.
@@ -37,15 +37,7 @@ if he does not belong to any team he will be notified.
 
 ![showHisTeam](https://user-images.githubusercontent.com/65177459/108538658-b84d0800-72e7-11eb-8e30-41b3592e9eb1.jpg)
 
-# Clicking on the chat.
-Displays all the people the user has talked to and their status (online or offline).
 
-![lastChat](https://user-images.githubusercontent.com/65177459/108538845-e7fc1000-72e7-11eb-8da1-ebd759d89e71.jpg)
-
-# Clicking on the Players.
-Displays all registered users in the application and their details.
-
-![players](https://user-images.githubusercontent.com/65177459/108539191-56d96900-72e8-11eb-9457-86bd0e418471.jpg)
 
 # Main Flow : Scheduling a meeting between two teams by their managers
 The team manager sends a message to the other manager via chat.
@@ -78,4 +70,16 @@ The team manager decides whether to approve the request or not. The player is up
 ![requestToJoin](https://user-images.githubusercontent.com/65177459/108545701-cce1ce00-72f0-11eb-8e65-b320818c9a35.jpg)
 
 
+# Clicking on the CreateTeam.
+
 ![createTeam](https://user-images.githubusercontent.com/65177459/108539874-36f67500-72e9-11eb-9349-ec9973f0de00.jpg)
+
+# Clicking on the chat.
+Displays all the people the user has talked to and their status (online or offline).
+
+![lastChat](https://user-images.githubusercontent.com/65177459/108538845-e7fc1000-72e7-11eb-8da1-ebd759d89e71.jpg)
+
+# Clicking on the Players.
+Displays all registered users in the application and their details.
+
+![players](https://user-images.githubusercontent.com/65177459/108539191-56d96900-72e8-11eb-9457-86bd0e418471.jpg)
