@@ -13,7 +13,7 @@ Each user has different permissions:
 * A player that not manage a team, not committed to one team and can requests to join other teams.
 
 
-The program is implemented with Firebase contain real-time updates between users and various photo packages designed by me and by various creators on the internet.
+The program is implemented with Firebase real-time updates between users and various photo packages designed by me and by various creators on the internet.
 Each user can select a profile picture and change it.
 
 Users can --have-- conversations with each other --through-- real-time chat.
