@@ -1,5 +1,6 @@
 # GoalMeet
 The purpose of the app is to connect football fans in order to meet in teams or individuals and hold football games.
+The app does not have to be used only for football. It can be used for another different types of sports like: joint running, different team games like basketball, volleyball etc.
 
 There are two types of users in the app:
 * Soccer Team Managers: This is a user who created a team.
