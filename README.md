@@ -50,7 +50,7 @@ if he does not belong to any team he will be notified.
 
 * The team manager sends a message to the other manager via chat.
 
-<img src="https://user-images.githubusercontent.com/65177459/108539262-6d7fc000-72e8-11eb-8b0a-6f41350d85f0.jpg" width="550">
+<img src="https://user-images.githubusercontent.com/65177459/108591014-2b4d9180-736f-11eb-961f-780132e8dffb.jpg" width="550">
 
 * One of the team managers sends the other manager an invitation to schedule a meeting.
 
@@ -73,7 +73,7 @@ The player checks which teams exist in the system by clicking on available team.
 
 * The player chats with the team manager, to check if the team is interested in another player and see if the team is suitable for him.
 
-<img src="https://user-images.githubusercontent.com/65177459/108539659-f696f700-72e8-11eb-8ec4-1f27857b85c1.jpg" width="550">
+<img src="https://user-images.githubusercontent.com/65177459/108591061-5e902080-736f-11eb-9b11-f3f7a472ebc5.jpg" width="550">
 
 * The team manager decides whether to approve the request or not. The player is updated according to the decision of the team manager.
   If the team manager decided to approve it, the next time the player clicks on "My Team" button its show details about the new team.
